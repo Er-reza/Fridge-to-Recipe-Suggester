@@ -14,7 +14,6 @@ I worked on the **frontend development using HTML**, including creating and stru
 
 - HTML
 - Python
-- Other technologies used by the team
 
 ## Project Description
 
