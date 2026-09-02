@@ -1,121 +1,2955 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fridge Recipe Matcher</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-emerald-50 min-h-screen font-sans">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fridge Recipe, Achaar, Dairy, Seafood & Diet Matcher</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-  <!-- Login Page -->
-  <div id="loginPage" class="flex items-center justify-center min-h-screen">
-    <div class="max-w-sm w-full bg-white p-6 rounded-2xl shadow-md border border-emerald-100">
-      <h1 class="text-2xl font-bold text-emerald-700 mb-4 text-center">🔐 Login</h1>
-      
-      <div class="mb-4">
-        <label class="block text-sm font-semibold text-gray-600 mb-1">Username</label>
-        <input id="username" type="text" placeholder="Enter Username"
-               class="w-full border border-gray-300 p-2 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+    body {
+      background-color: #dce5e0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px 12px;
+    }
+
+    .container {
+      background: #ffffff;
+      width: 100%;
+      max-width: 880px;
+      padding: 28px;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.07);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .header h1 {
+      color: #1e7e4e;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .quote {
+      font-size: 11px;
+      color: #777;
+      font-weight: 600;
+      text-transform: uppercase;
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+
+    .subtext {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 16px;
+    }
+
+    /* Category Filter Tabs */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 7px 14px;
+      border-radius: 20px;
+      border: 1.5px solid #d5dbd7;
+      background: #f7f9f8;
+      color: #555;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      background-color: #e8eee9;
+    }
+
+    .tab-btn.active {
+      background-color: #1e7e4e;
+      color: #ffffff;
+      border-color: #1e7e4e;
+    }
+
+    .tab-btn.tab-my-reviews.active {
+      background-color: #0284c7;
+      border-color: #0284c7;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #b78103;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .presets-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .presets-grid::-webkit-scrollbar {
+      width: 5px;
+    }
+    .presets-grid::-webkit-scrollbar-thumb {
+      background: #d4d0be;
+      border-radius: 10px;
+    }
+
+    .preset-btn {
+      background-color: #f7ecd7;
+      border: 1px solid #ebd8b6;
+      color: #5c4314;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .preset-btn:hover {
+      background-color: #ebd3a8;
+      transform: translateY(-1px);
+    }
+
+    .preset-btn.selected {
+      background-color: #1e7e4e;
+      color: #ffffff;
+      border-color: #1e7e4e;
+    }
+
+    /* Input & Ingredient Basket */
+    .input-section {
+      background: #fafbfb;
+      border: 1.5px dashed #c0d1c7;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .input-row input {
+      flex: 1;
+      min-width: 220px;
+      padding: 10px 14px;
+      border: 1.5px solid #d5dbd7;
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-row input:focus {
+      border-color: #1e7e4e;
+    }
+
+    .btn-action {
+      border: none;
+      border-radius: 8px;
+      padding: 0 14px;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+      height: 38px;
+    }
+
+    .btn-add-ing {
+      background-color: #1e7e4e;
+      color: #ffffff;
+    }
+    .btn-add-ing:hover {
+      background-color: #16603b;
+    }
+
+    .btn-search-dish {
+      background-color: #2563eb;
+      color: #ffffff;
+    }
+    .btn-search-dish:hover {
+      background-color: #1d4ed8;
+    }
+
+    .basket-title {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .tags-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      min-height: 28px;
+      margin-bottom: 10px;
+    }
+
+    .tag-chip {
+      background: #e8f5e9;
+      color: #1e7e4e;
+      border: 1px solid #c8e6c9;
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tag-chip .close-btn {
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      color: #d32f2f;
+      line-height: 1;
+    }
+
+    .empty-tags {
+      font-size: 12px;
+      color: #999;
+      font-style: italic;
+    }
+
+    .history-section {
+      border-top: 1px solid #edf2ef;
+      padding-top: 8px;
+      margin-top: 6px;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #666;
+      margin-bottom: 6px;
+    }
+
+    .history-clear-btn {
+      background: none;
+      border: none;
+      color: #d32f2f;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .history-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .history-chip {
+      background: #eef3f0;
+      color: #334e40;
+      border: 1px solid #d4e0d9;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .history-chip:hover {
+      background: #1e7e4e;
+      color: #ffffff;
+      border-color: #1e7e4e;
+    }
+
+    .btn-find {
+      width: 100%;
+      background-color: #f39c38;
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(243, 156, 56, 0.3);
+      transition: background 0.2s;
+    }
+
+    .btn-find:hover {
+      background-color: #de8823;
+    }
+
+    /* Recipe & Nutrition Display Box */
+    .recipe-card {
+      display: none;
+      margin-top: 18px;
+      background-color: #f6faf7;
+      border: 1.5px solid #c7e3d1;
+      border-radius: 14px;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .recipe-title-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .recipe-title {
+      color: #1e7e4e;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .title-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .recipe-badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .badge-dairy { background: #fef9c3; color: #854d0e; border: 1px solid #fef08a; }
+    .badge-pickle { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+    .badge-diet { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+    .badge-veg { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .badge-nonveg { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .badge-seafood { background: #e0e7ff; color: #3730a3; border: 1px solid #c7d2fe; }
+    .badge-refreshment { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
+
+    .fav-btn {
+      background: #ffffff;
+      border: 1.5px solid #f87171;
+      color: #dc2626;
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .fav-btn.active {
+      background: #dc2626;
+      color: #ffffff;
+    }
+
+    .recipe-steps {
+      color: #3b4941;
+      font-size: 13.5px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .nutrition-section {
+      background: #ffffff;
+      border: 1px solid #d9e6de;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+
+    .nutrition-header {
+      font-size: 12px;
+      font-weight: 800;
+      color: #24583b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .nutrition-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 8px;
+    }
+
+    .nutri-box {
+      background: #f8faf9;
+      border: 1px solid #ebf2ee;
+      padding: 8px 10px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .nutri-label {
+      font-size: 10.5px;
+      color: #718096;
+      font-weight: 600;
+      display: block;
+      text-transform: uppercase;
+    }
+
+    .nutri-val {
+      font-size: 14px;
+      color: #1a202c;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+
+    /* Reviews, Ratings, and Sorting */
+    .reviews-section {
+      background: #ffffff;
+      border: 1px solid #d9e6de;
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .reviews-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-weight: 800;
+      color: #24583b;
+      margin-bottom: 10px;
+    }
+
+    .star-filter-bar {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .star-filter-pill {
+      background: #f1f5f3;
+      border: 1px solid #d4e0d9;
+      color: #444;
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .star-filter-pill.active {
+      background: #f59e0b;
+      color: #ffffff;
+      border-color: #f59e0b;
+    }
+
+    .star-rating {
+      display: flex;
+      gap: 4px;
+      cursor: pointer;
+      font-size: 20px;
+      color: #d1d5db;
+      margin-bottom: 8px;
+    }
+
+    .star-rating span.active {
+      color: #f59e0b;
+    }
+
+    .review-form input, .review-form textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1.5px solid #d5dbd7;
+      border-radius: 8px;
+      font-size: 12.5px;
+      outline: none;
+      margin-bottom: 8px;
+      font-family: inherit;
+    }
+
+    .review-form textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .form-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-submit-review {
+      background-color: #1e7e4e;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn-cancel-edit {
+      display: none;
+      background-color: #6b7280;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .reviews-list {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .review-item {
+      background: #f8faf9;
+      border: 1px solid #e2ece6;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .review-item-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 4px;
+      align-items: center;
+    }
+
+    .review-user-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .review-user {
+      font-weight: 700;
+      color: #333;
+    }
+
+    .my-review-tag {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 8px;
+      font-weight: 700;
+    }
+
+    .review-stars {
+      color: #f59e0b;
+    }
+
+    .review-text {
+      font-size: 12.5px;
+      color: #444;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+
+    .review-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 11.5px;
+    }
+
+    .btn-link {
+      background: none;
+      border: none;
+      color: #1e7e4e;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 11.5px;
+      padding: 0;
+    }
+
+    .btn-link.delete-link {
+      color: #dc2626;
+    }
+
+    .reply-box {
+      display: none;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed #d5dbd7;
+    }
+
+    .reply-list {
+      margin-top: 6px;
+      padding-left: 12px;
+      border-left: 2px solid #c7e3d1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .reply-item {
+      font-size: 11.5px;
+      color: #555;
+      background: #ffffff;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    /* Dedicated "My Reviews Dashboard" Box */
+    .my-reviews-dashboard {
+      display: none;
+      margin-top: 18px;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .my-reviews-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0369a1;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .my-review-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .my-review-dish-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .my-review-dish-name {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #1e7e4e;
+    }
+
+    /* Contact / Support Footer Box */
+    .footer-support {
+      margin-top: 24px;
+      border-top: 1.5px dashed #cbd5e1;
+      padding-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #f8fafc;
+      border-radius: 12px;
+      padding: 14px 18px;
+    }
+
+    .support-text-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .support-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e7e4e;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .support-sub {
+      font-size: 11.5px;
+      color: #64748b;
+    }
+
+    .support-email-pill {
+      background: #e0f2fe;
+      border: 1px solid #bae6fd;
+      color: #0369a1;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .support-email-pill:hover {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+    }
+
+    /* Modal / Pop-up Box */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+
+    .modal-content {
+      background: #ffffff;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .modal-header h3 {
+      color: #1e7e4e;
+      font-size: 18px;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      font-weight: bold;
+      color: #888;
+      cursor: pointer;
+    }
+
+    .modal-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 260px;
+      overflow-y: auto;
+      margin: 14px 0;
+    }
+
+    .modal-item-btn {
+      text-align: left;
+      background: #f8faf9;
+      border: 1.5px solid #dce8e1;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #24583b;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-item-btn:hover {
+      background: #e8f5ed;
+      border-color: #1e7e4e;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <span style="font-size: 24px;">🍳</span>
+      <h1>Fridge Recipe, Achaar, Dairy, Seafood & Diet Matcher</h1>
+    </div>
+
+    <p class="quote">
+      Foods are not just a source of energy but actually love that we show by cooking with right ingredients. 💛 🧑‍🍳
+    </p>
+    <p class="subtext">Explore curated recipes across 7 studios, match ingredients, or search your favorite dishes!</p>
+
+    <!-- Category Tabs -->
+    <div class="filter-tabs">
+      <button class="tab-btn active" id="tab-all" onclick="filterItems('all')">All Items (173)</button>
+      <button class="tab-btn" id="tab-dairy" onclick="filterItems('dairy')">🥛 Dairy & Mithai (30)</button>
+      <button class="tab-btn" id="tab-pickle" onclick="filterItems('pickle')">🥒 Desi Achaar (8)</button>
+      <button class="tab-btn" id="tab-diet" onclick="filterItems('diet')">💪 Fitness & Diet (30)</button>
+      <button class="tab-btn" id="tab-veg" onclick="filterItems('veg')">🥗 Veg Delights (35)</button>
+      <button class="tab-btn" id="tab-nonveg" onclick="filterItems('nonveg')">🍗 Non-Veg Protein (30)</button>
+      <button class="tab-btn" id="tab-seafood" onclick="filterItems('seafood')">🦀 Seafood Specialties (10)</button>
+      <button class="tab-btn" id="tab-refreshment" onclick="filterItems('refreshment')">🍹 Refreshments (30)</button>
+      <button class="tab-btn" id="tab-fav" onclick="filterItems('fav')">❤️ My Favorites (<span id="favCount">0</span>)</button>
+      <button class="tab-btn tab-my-reviews" id="tab-myreviews" onclick="showMyReviewsDashboard()">📝 My Reviews (<span id="myReviewsCount">0</span>)</button>
+    </div>
+
+    <div class="section-title">⚡ QUICK PRESET ITEMS :</div>
+    <div class="presets-grid" id="presetContainer"></div>
+
+    <!-- Dual Actions: Add Ingredient vs Direct Dish Search -->
+    <div class="input-section">
+      <div class="input-row">
+        <input 
+          type="text" 
+          id="customInput" 
+          placeholder="Type an ingredient (e.g. rice, milk, fish, atta) or dish name..." 
+          onkeydown="if(event.key==='Enter') addIngredientFromInput()"
+        />
+        <button class="btn-action btn-add-ing" onclick="addIngredientFromInput()">+ Add Ingredient</button>
+        <button class="btn-action btn-search-dish" onclick="searchDishDirectly()">🔍 Search Dish</button>
+      </div>
+
+      <div class="basket-title">🧺 My Added Ingredients (Click × to remove):</div>
+      <div class="tags-container" id="tagsContainer">
+        <span class="empty-tags">No ingredients added yet. Type above and press + Add Ingredient!</span>
+      </div>
+
+      <!-- History -->
+      <div class="history-section">
+        <div class="history-header">
+          <span>🕘 Recently Searched / Prepared:</span>
+          <button class="history-clear-btn" onclick="clearHistory()">Clear History</button>
+        </div>
+        <div class="history-chips" id="historyChips">
+          <span style="font-size:11px; color:#999; font-style:italic;">No search history yet.</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-find" onclick="findRecipesFromIngredients()">🔍 Find Matching Recipes & Macro Profile</button>
+
+    <!-- Dedicated "My Reviews" Hub Dashboard -->
+    <div class="my-reviews-dashboard" id="myReviewsDashboard">
+      <div class="my-reviews-title">
+        <span>📝 My Submitted Reviews Dashboard</span>
+        <button class="btn-link" onclick="closeMyReviewsDashboard()" style="color:#0369a1; font-size:13px;">✕ Close Hub</button>
+      </div>
+      <div id="myReviewsListContainer"></div>
+    </div>
+
+    <!-- Recipe Display Box -->
+    <div class="recipe-card" id="recipeCard">
+      <div class="recipe-title-wrapper">
+        <span class="recipe-title" id="recipeTitleText"></span>
+        <div class="title-actions">
+          <span id="recipeBadge" class="recipe-badge"></span>
+          <button class="fav-btn" id="favToggleBtn" onclick="toggleFavoriteCurrent()">❤️ Favorite</button>
+        </div>
       </div>
       
-      <div class="mb-4">
-        <label class="block text-sm font-semibold text-gray-600 mb-1">Password</label>
-        <input id="password" type="password" placeholder="Enter Password"
-               class="w-full border border-gray-300 p-2 rounded-lg outline-none focus:ring-2 focus:ring-emerald-500">
+      <div class="recipe-steps" id="recipeSteps"></div>
+
+      <!-- Macros Grid -->
+      <div class="nutrition-section">
+        <div class="nutrition-header">📊 Estimated Nutrition & Macro Profile (Per Serving)</div>
+        <div class="nutrition-grid" id="nutritionGrid"></div>
       </div>
-      
-      <button onclick="checkLogin()" 
-              class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 rounded-lg font-semibold">
-        Login
-      </button>
-      <p id="errorMsg" class="text-red-500 text-sm mt-2 hidden">❌ Invalid credentials</p>
+
+      <!-- Enhanced Reviews & Ratings Section -->
+      <div class="reviews-section">
+        <div class="reviews-header">
+          <span>💬 Community Reviews & Ratings</span>
+          <span style="font-size:11px; color:#666;" id="reviewCountText">0 Reviews</span>
+        </div>
+
+        <!-- Star Filter Tabs -->
+        <div class="star-filter-bar" id="starFilterBar"></div>
+
+        <div class="review-form">
+          <div class="star-rating" id="starRating">
+            <span onclick="setRating(1)">★</span>
+            <span onclick="setRating(2)">★</span>
+            <span onclick="setRating(3)">★</span>
+            <span onclick="setRating(4)">★</span>
+            <span onclick="setRating(5)">★</span>
+          </div>
+          <input type="text" id="reviewerName" placeholder="Your Name (e.g., Aarti, Rohan)" />
+          <textarea id="reviewText" placeholder="Share your cooking notes, adjustments, or taste feedback..."></textarea>
+          <div class="form-buttons">
+            <button class="btn-submit-review" id="submitReviewBtn" onclick="submitReview()">Submit Review ⭐</button>
+            <button class="btn-cancel-edit" id="cancelEditBtn" onclick="cancelEditing()">Cancel Edit</button>
+          </div>
+        </div>
+
+        <div class="reviews-list" id="reviewsList"></div>
+      </div>
+    </div>
+
+    <!-- Footer Support / Contact Section -->
+    <div class="footer-support">
+      <div class="support-text-wrap">
+        <div class="support-title">📬 Have Queries, Issues or Recipe Suggestions?</div>
+        <div class="support-sub">Feel free to reach out to our culinary support team directly.</div>
+      </div>
+      <a href="mailto:fridge.to.recipe@gamil.com" class="support-email-pill">
+        ✉️ fridge.to.recipe@gamil.com
+      </a>
     </div>
   </div>
 
-  <!-- Main Page (hidden initially) -->
-  <div id="mainPage" class="hidden p-6">
-    <div class="max-w-xl mx-auto bg-white p-6 rounded-2xl shadow-md border border-amber-100">
-      <h1 class="text-2xl font-bold text-emerald-700 mb-2">🍳 Fridge Recipe Matcher</h1>
-      <p class="text-xs text-gray-500 mb-4">
-        FOODS ARE NOT JUST A SOURCE OF ENERGY BUT ACTUALLY LOVE THAT WE SHOW BY COOKING WITH RIGHT INGREDIANTS.🤝👪
-        <br>Click a preset below or type custom ingredients!
+  <!-- Matching Modal -->
+  <div class="modal-overlay" id="matchModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">🍲 Matching Recipes Found!</h3>
+        <button class="modal-close" onclick="closeModal()">×</button>
+      </div>
+      <p style="font-size: 12.5px; color: #666;" id="modalSubtitle">
+        Based on your ingredients, you can make the following dishes:
       </p>
-      
-      <!-- Quick Demo Preset Buttons -->
-      <div class="mb-4">
-        <p class="text-xs font-semibold text-gray-600 mb-2">⚡LIST OF THE ITEMS :</p>
-        <div class="flex flex-wrap gap-2">
-          <button onclick="showRecipe('tea')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg font-bold">☕ Tea Setup</button>
-          <button onclick="showRecipe('rasmalai')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg font-bold">🥛 Rasmalai Setup</button>
-          <button onclick="showRecipe('lassi')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg font-bold">🥭 Mango Lassi Setup</button>
-          <button onclick="showRecipe('pancakes')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg font-bold">🥞 Pancakes Setup</button>
-          <button onclick="showRecipe('omelette')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg font-bold">🍳 Omelette Setup</button>
-          <button onclick="showRecipe('fruit salad')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg font-bold">🥗 Fruit Salad Setup</button>
-          <button onclick="showRecipe('chocolate cake')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg font-bold">🍰 Chocolate Cake Setup</button>
-          <button onclick="showRecipe('lays')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 text-xs px-3 py-1.5 rounded-lg font-bold">🍝 Lays (Spanish Tomato Tango 🌶️)</button>
-        </div>
-      </div>
-
-      <!-- Manual Ingredient Input -->
-      <div class="flex gap-2 mb-4">
-        <input id="ingredientInput" type="text" placeholder="Type ingredient (e.g. ginger)..." 
-               class="border border-gray-300 p-2 rounded-lg flex-1 outline-none focus:ring-2 focus:ring-emerald-500">
-        <button onclick="addIngredient()" 
-                class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-semibold">Add</button>
-      </div>
-
-      <!-- Active Ingredients Tags -->
-      <div id="ingredientList" class="flex flex-wrap gap-2 mb-4"></div>
-
-      <!-- Submit Button -->
-      <button onclick="getRecipes()" class="w-full bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-lg font-bold text-lg transition shadow-md">Find Recipes</button>
-
-      <!-- Results Area -->
-      <div id="results" class="mt-6 space-y-4 text-gray-800"></div>
+      <div class="modal-list" id="modalList"></div>
     </div>
   </div>
 
   <script>
-    function checkLogin() {
-      const user = document.getElementById("username").value;
-      const pass = document.getElementById("password").value;
+    const recipesData = {
+      // =========================================================================
+      // 🥛 30 DAIRY & MITHAI STUDIO ITEMS
+      // =========================================================================
+      "Rice Kheer Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Rice Kheer Setup",
+        steps: "Simmer 1 liter full cream milk in a heavy pan. Wash 1/4 cup basmati rice, sauté lightly in 1 tsp ghee, and add to the simmering milk. Cook on low flame for 25 minutes until rice is soft and milk reduces to half. Stir in 1/3 cup sugar, crushed green cardamom, and saffron strands. Garnish with slivered almonds and pistachios.",
+        macros: { cal: "260 kcal", protein: "7g", fat: "9g", carbs: "38g", fiber: "0.5g", chol: "25mg" },
+        ingredients: ["milk", "rice", "sugar", "ghee", "cardamom", "saffron", "almond", "pista"]
+      },
+      "Kaju Katli Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Kaju Katli Setup",
+        steps: "Grind 1 cup cashews into a fine powder without releasing oil. In a non-stick pan, dissolve 1/2 cup sugar in 1/4 cup water to form a 1-string syrup. Add cashew powder and 1 tsp ghee; stir continuously on low heat until dough leaves the pan sides. Knead gently while warm, roll between butter papers, and slice into diamonds.",
+        macros: { cal: "180 kcal", protein: "4g", fat: "10g", carbs: "20g", fiber: "0.8g", chol: "3mg" },
+        ingredients: ["cashew", "kaju", "sugar", "ghee", "water"]
+      },
+      "Desi Ghee (from Malai) Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Desi Ghee (from Malai) Setup",
+        steps: "Collect milk cream (malai) for 7-10 days in the freezer. Thaw, churn with ice-cold water using a mixer or blender to separate fresh butter (makhan) and buttermilk. Transfer separated butter to a heavy pan and cook on medium-low flame. The milk solids will turn golden brown at the bottom and golden aromatic liquid ghee floats to the top. Strain and store in a clean jar.",
+        macros: { cal: "112 kcal", protein: "0g", fat: "12.7g", carbs: "0g", fiber: "0g", chol: "30mg" },
+        ingredients: ["malai", "cream", "butter", "milk"]
+      },
+      "Rasgulla Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Rasgulla Setup",
+        steps: "Curdle 1 liter boiling milk with 2 tbsp lemon juice or vinegar. Strain the whey through a muslin cloth, rinse under cold water, and hang for 30 minutes to make soft chenna. Knead chenna with 1 tsp semolina (sooji) for 6 minutes until completely smooth and grease-free. Roll into small crack-free balls and boil in a wide pot of thin boiling sugar syrup (1 cup sugar to 4 cups water) on high flame covered for 10 minutes.",
+        macros: { cal: "140 kcal", protein: "4g", fat: "2g", carbs: "28g", fiber: "0g", chol: "8mg" },
+        ingredients: ["milk", "lemon", "sugar", "sooji", "water", "cardamom"]
+      },
+      "Gulab Jamun Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Gulab Jamun Setup",
+        steps: "Grate 200g soft mawa (khoya) and 50g paneer. Mix with 3 tbsp all-purpose flour (maida) and a pinch of baking powder; knead gently into a smooth dough. Shape into small crack-free balls. Deep fry in pure ghee on very low heat until dark golden brown throughout. Drop hot jamuns immediately into warm cardamom-saffron sugar syrup for 2 hours.",
+        macros: { cal: "300 kcal", protein: "4g", fat: "12g", carbs: "46g", fiber: "0.5g", chol: "28mg" },
+        ingredients: ["mawa", "khoya", "paneer", "flour", "ghee", "sugar", "cardamom", "saffron"]
+      },
+      "Rabri Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Rabri Setup",
+        steps: "Boil 1.5 liters full-cream buffalo milk in a wide, shallow kadai on medium heat. As cream (malai) layers form on top, gently gather and stick them to the sides of the pan. Continue until the milk reduces to 1/3 of its volume. Scrape all accumulated malai layers back into the thick reduced milk. Stir in 3 tbsp sugar, cardamom, and rose water. Chill before serving.",
+        macros: { cal: "220 kcal", protein: "6g", fat: "11g", carbs: "24g", fiber: "0g", chol: "35mg" },
+        ingredients: ["milk", "sugar", "cardamom", "rose water", "pista"]
+      },
+      "Homemade Paneer (Chenna) Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Homemade Paneer (Chenna) Setup",
+        steps: "Bring 1.5 liters full-fat milk to a rolling boil. Turn off flame and stir in 2 tbsp lemon juice diluted with 2 tbsp water until curdles separate into clear greenish whey and solid chenna. Pour through a muslin strainer, rinse with fresh water to remove sourness, press firmly with a heavy weight for 40 minutes, and slice into firm blocks.",
+        macros: { cal: "265 kcal", protein: "18g", fat: "20g", carbs: "3g", fiber: "0g", chol: "45mg" },
+        ingredients: ["milk", "lemon", "vinegar", "water"]
+      },
+      "Kalakand Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Kalakand Setup",
+        steps: "In a pan, combine 1 cup fresh soft chenna (crumbled paneer) with 1/2 cup condensed milk or reduced milk and sugar. Cook on low heat, stirring continuously for 6-8 minutes until mixture leaves pan sides while retaining its grainy (danedar) texture. Set in a greased tray, top with pistachios, let cool, and cut into squares.",
+        macros: { cal: "190 kcal", protein: "6g", fat: "8g", carbs: "24g", fiber: "0.2g", chol: "22mg" },
+        ingredients: ["paneer", "chenna", "condensed milk", "milk", "sugar", "cardamom", "pista"]
+      },
+      "Besan Ladoo Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Besan Ladoo Setup",
+        steps: "Roast 2 cups coarse besan (gram flour) in 1/2 cup melted desi ghee on low flame for 20-25 minutes until nutty and golden brown. Turn off heat and sprinkle 1 tsp water to create a grainy texture. Let cool to lukewarm, mix in 1 cup boora or powdered sugar and cardamom. Shape firmly into round ladoos.",
+        macros: { cal: "220 kcal", protein: "5g", fat: "11g", carbs: "26g", fiber: "2.5g", chol: "20mg" },
+        ingredients: ["besan", "gram flour", "ghee", "sugar", "cardamom", "almond"]
+      },
+      "Sandesh Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Sandesh Setup",
+        steps: "Knead 200g fresh, moisture-free chenna on a flat plate with your palm for 5 minutes until silky smooth. Cook in a non-stick pan on very low heat with 3 tbsp date palm jaggery (nolen gur) or powdered sugar for just 4 minutes. Shape into round discs or press into traditional wooden moulds.",
+        macros: { cal: "130 kcal", protein: "5g", fat: "4g", carbs: "18g", fiber: "0g", chol: "12mg" },
+        ingredients: ["chenna", "paneer", "jaggery", "sugar", "cardamom"]
+      },
+      "Shrikhand Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Shrikhand Setup",
+        steps: "Tie 500g fresh thick curd in a muslin cloth and hang overnight (8 hours) in the fridge to extract all whey, yielding hung curd (chakka). Whisk chakka with 1/2 cup powdered sugar, warm saffron milk, and cardamom powder until glossy and cloud-like. Serve chilled.",
+        macros: { cal: "210 kcal", protein: "8g", fat: "6g", carbs: "31g", fiber: "0g", chol: "18mg" },
+        ingredients: ["curd", "yogurt", "sugar", "saffron", "cardamom", "pista"]
+      },
+      "Mysore Pak Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Mysore Pak Setup",
+        steps: "Sift 1 cup besan and mix with 1/2 cup warm ghee without lumps. Boil 1 cup sugar with 1/2 cup water to 1-string consistency. Add besan mixture and cook while gradually pouring 1 cup piping-hot ghee in batches. When bubbles froth and honeycomb texture appears, quickly pour into a tray and slice.",
+        macros: { cal: "340 kcal", protein: "4g", fat: "22g", carbs: "32g", fiber: "1.5g", chol: "45mg" },
+        ingredients: ["besan", "ghee", "sugar", "water"]
+      },
+      "Mathura Peda Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Mathura Peda Setup",
+        steps: "Roast 250g crumbled mawa (khoya) in 1 tbsp desi ghee continuously on low flame until it turns a deep caramel brown color. Add 2 tbsp milk, stir until smooth, and cool slightly. Mix in 1/2 cup powdered sugar (boora) and cardamom, shape into rustic pedas, and roll in boora sugar.",
+        macros: { cal: "170 kcal", protein: "4g", fat: "7g", carbs: "22g", fiber: "0g", chol: "20mg" },
+        ingredients: ["mawa", "khoya", "ghee", "sugar", "milk", "cardamom"]
+      },
+      "Rasmalai Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Rasmalai Setup",
+        steps: "Knead soft fresh chenna into flat discs and cook in boiling light sugar syrup for 9 minutes until spongy. Simultaneously, simmer full-cream milk with saffron and cardamom until reduced to half (rabri). Soak the cooked, squeezed discs in chilled saffron rabri and garnish with chopped pistachios.",
+        macros: { cal: "240 kcal", protein: "7g", fat: "8g", carbs: "34g", fiber: "0.5g", chol: "22mg" },
+        ingredients: ["milk", "chenna", "paneer", "sugar", "saffron", "cardamom", "pista"]
+      },
+      "Gajar Ka Halwa Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Gajar Ka Halwa Setup",
+        steps: "Sauté 1kg grated red winter carrots in 3 tbsp pure desi ghee for 5 minutes. Pour in 1 liter full-cream milk and simmer on medium flame until milk is completely absorbed. Stir in 3/4 cup sugar, 100g khoya (mawa), cardamom, and roasted cashews. Sauté until ghee starts separating.",
+        macros: { cal: "310 kcal", protein: "6g", fat: "14g", carbs: "42g", fiber: "3.5g", chol: "32mg" },
+        ingredients: ["carrot", "milk", "ghee", "sugar", "mawa", "khoya", "cashew", "cardamom"]
+      },
+      "Moong Dal Halwa Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Moong Dal Halwa Setup",
+        steps: "Soak yellow moong dal for 4 hours and grind coarsely without water. Sauté in equal quantity of pure desi ghee on low flame for 25-30 minutes until aromatic and golden brown. Pour in warm milk, saffron water, and sugar. Cook until halwa turns glossy and leaves ghee on the sides.",
+        macros: { cal: "380 kcal", protein: "8g", fat: "20g", carbs: "44g", fiber: "3g", chol: "48mg" },
+        ingredients: ["moong dal", "ghee", "milk", "sugar", "saffron", "cardamom", "cashew"]
+      },
+      "Malpua with Rabri Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Malpua with Rabri Setup",
+        steps: "Whisk 1 cup flour (maida), 1/2 cup mawa (khoya), 1 tsp crushed fennel (saunf), and warm milk into a pouring batter. Shallow fry ladlefuls in pure ghee until edges turn crisp and golden. Dip immediately into warm saffron cardamom sugar syrup and serve topped with rich rabri.",
+        macros: { cal: "320 kcal", protein: "5g", fat: "15g", carbs: "42g", fiber: "1g", chol: "35mg" },
+        ingredients: ["flour", "mawa", "khoya", "milk", "saunf", "ghee", "sugar", "saffron"]
+      },
+      "Phirni Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Phirni Setup",
+        steps: "Soak 1/4 cup basmati rice for 30 minutes, dry on a cloth, and grind coarsely into a semolina-like paste. Whisk into 1 liter cold milk and simmer on low heat, stirring continuously to avoid lumps. Add sugar, saffron, cardamom, and almond paste; pour into clay pots (matkas) and chill.",
+        macros: { cal: "220 kcal", protein: "5g", fat: "7g", carbs: "34g", fiber: "0.5g", chol: "20mg" },
+        ingredients: ["rice", "milk", "sugar", "saffron", "cardamom", "almond"]
+      },
+      "Basundi Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Basundi Setup",
+        steps: "Slow-simmer 1.5 liters full-cream milk in a wide pan, continuously scraping thickened cream from the sides back into the milk. Once reduced to half, stir in sugar, crushed nutmeg, cardamom powder, saffron, and sliced charoli (chironji) nuts. Chill before serving.",
+        macros: { cal: "230 kcal", protein: "7g", fat: "10g", carbs: "28g", fiber: "0.2g", chol: "30mg" },
+        ingredients: ["milk", "sugar", "cardamom", "nutmeg", "saffron", "pista", "almond"]
+      },
+      "Matka Malai Kulfi Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Matka Malai Kulfi Setup",
+        steps: "Reduce 1 liter full cream milk to 1/3 volume with 1/4 cup condensed milk, crushed cardamom, and saffron. Mix in 1 tbsp cornflour dissolved in 2 tbsp cold milk and simmer for 2 minutes. Stir in sliced pistachios and almonds, pour into earthen matkas or kulfi moulds, and freeze for 8 hours.",
+        macros: { cal: "210 kcal", protein: "6g", fat: "9g", carbs: "26g", fiber: "0.5g", chol: "26mg" },
+        ingredients: ["milk", "condensed milk", "sugar", "cardamom", "saffron", "pista", "almond"]
+      },
+      "Alwar Milk Cake Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Alwar Milk Cake Setup",
+        steps: "Boil 2 liters full cream milk until reduced to half. Add 1/4 tsp alum or citric acid to create micro-granules. Cook continuously while adding 1 cup sugar in batches. Add 2 tbsp ghee and cook until deep brown at the center. Pour into an insulated tin and wrap with a towel for 6 hours to brown.",
+        macros: { cal: "290 kcal", protein: "7g", fat: "12g", carbs: "38g", fiber: "0g", chol: "35mg" },
+        ingredients: ["milk", "sugar", "ghee", "lemon", "cardamom"]
+      },
+      "Coconut Ladoo Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Coconut Ladoo Setup",
+        steps: "Sauté 2 cups freshly grated or desiccated coconut in 1 tsp desi ghee for 2 minutes. Add 1 cup condensed milk (or 1 cup milk + 1/2 cup sugar) and cardamom powder. Stir on low flame until mixture clumps together. Let cool slightly, roll into round balls, and coat in dry coconut.",
+        macros: { cal: "160 kcal", protein: "3g", fat: "9g", carbs: "18g", fiber: "2g", chol: "10mg" },
+        ingredients: ["coconut", "condensed milk", "milk", "sugar", "ghee", "cardamom"]
+      },
+      "Chum Chum Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Chum Chum Setup",
+        steps: "Knead fresh chenna with a pinch of flour, shape into oval cylinders, and boil in sugar syrup for 10 minutes until spongy. Slit lengthwise once cooled, stuff with sweetened mawa (khoya) rabri, and roll in desiccated coconut.",
+        macros: { cal: "220 kcal", protein: "5g", fat: "7g", carbs: "34g", fiber: "0.5g", chol: "20mg" },
+        ingredients: ["chenna", "paneer", "sugar", "mawa", "khoya", "coconut", "saffron"]
+      },
+      "Mawa Gujiya Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Mawa Gujiya Setup",
+        steps: "Prepare filling by roasting mawa (khoya) with dry fruits, coconut, and cardamom; cool and mix with powdered sugar. Roll all-purpose flour dough into small circles, place filling inside, seal edges with water pleats, and deep-fry in pure desi ghee on medium heat until golden.",
+        macros: { cal: "280 kcal", protein: "5g", fat: "14g", carbs: "34g", fiber: "1g", chol: "30mg" },
+        ingredients: ["flour", "mawa", "khoya", "sugar", "ghee", "coconut", "cardamom", "cashew"]
+      },
+      "Paneer Jalebi Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Paneer Jalebi Setup",
+        steps: "Blend 150g fresh chenna/paneer, 2 tbsp flour, and 1 tbsp cornflour with 2 tbsp milk into a smooth pipeable batter. Pipe spirals through a cloth or bottle into medium-hot pure ghee. Deep-fry until dark golden and soak in warm saffron cardamom sugar syrup for 2 minutes.",
+        macros: { cal: "260 kcal", protein: "6g", fat: "11g", carbs: "35g", fiber: "0.2g", chol: "25mg" },
+        ingredients: ["paneer", "chenna", "flour", "milk", "ghee", "sugar", "saffron", "cardamom"]
+      },
+      "Badam Halwa Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Badam Halwa Setup",
+        steps: "Soak 1 cup almonds in hot water, peel, and grind with 1/4 cup milk into a semi-fine paste. Sauté paste in 1/2 cup desi ghee on low flame for 15 minutes until aromatic and golden. Add 1/2 cup sugar, saffron milk, and cardamom. Stir until ghee leaves the sides.",
+        macros: { cal: "360 kcal", protein: "7g", fat: "24g", carbs: "30g", fiber: "3.5g", chol: "40mg" },
+        ingredients: ["almond", "badam", "milk", "ghee", "sugar", "saffron", "cardamom"]
+      },
+      "Sooji Halwa (Sheera) Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Sooji Halwa (Sheera) Setup",
+        steps: "Roast 1/2 cup semolina (sooji) in 1/2 cup desi ghee on medium flame until golden brown and fragrant. Slowly pour in 1.5 cups boiling water and 1/2 cup milk while stirring continuously to prevent lumps. Add 1/2 cup sugar, cardamom, cashews, and raisins; cover and cook for 2 minutes.",
+        macros: { cal: "290 kcal", protein: "4g", fat: "14g", carbs: "38g", fiber: "1.2g", chol: "30mg" },
+        ingredients: ["sooji", "semolina", "ghee", "milk", "sugar", "cashew", "cardamom"]
+      },
+      "Sweet Lassi Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Sweet Lassi Setup",
+        steps: "Whisk 1.5 cups chilled fresh thick curd with 3 tbsp sugar, 1/4 cup chilled milk, and a dash of cardamom powder using a wooden mathani until frothy. Pour into a tall glass and top with a generous spoonful of thick fresh malai and chopped nuts.",
+        macros: { cal: "220 kcal", protein: "7g", fat: "8g", carbs: "31g", fiber: "0g", chol: "24mg" },
+        ingredients: ["curd", "yogurt", "sugar", "milk", "malai", "cardamom", "pista"]
+      },
+      "Fresh White Butter (Makhan) Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Fresh White Butter (Makhan) Setup",
+        steps: "Take chilled collected milk cream (malai) and churn in a food processor or with a whisk with 1/2 cup ice-cold water for 3 minutes. The fat globules clump together into soft, silky white butter floating over buttermilk. Squeeze out liquid and serve fresh with parathas.",
+        macros: { cal: "102 kcal", protein: "0.1g", fat: "11.5g", carbs: "0.1g", fiber: "0g", chol: "30mg" },
+        ingredients: ["malai", "cream", "water", "milk"]
+      },
+      "Mawa Stuffed Paneer Roll Setup": {
+        category: "dairy",
+        badge: "🥛 Dairy & Mithai",
+        title: "📖 Recipe for Mawa Stuffed Paneer Roll Setup",
+        steps: "Knead fresh paneer and mawa in equal parts with powdered sugar and cardamom. Roll flat between parchment sheets, spread a layer of chopped pistachios, roll into a tight cylindrical log, chill for 1 hour, and slice into round coin discs.",
+        macros: { cal: "210 kcal", protein: "7g", fat: "12g", carbs: "19g", fiber: "0.5g", chol: "28mg" },
+        ingredients: ["paneer", "mawa", "khoya", "sugar", "cardamom", "pista"]
+      },
 
-      if (user === "Shadow Break" && pass === "SD262") {
-        document.getElementById("loginPage").classList.add("hidden");
-        document.getElementById("mainPage").classList.remove("hidden");
-      } else {
-        document.getElementById("errorMsg").classList.remove("hidden");
+      // =========================================================================
+      // 🥒 8 DESI ACHAAR & PRESERVES STUDIO ITEMS
+      // =========================================================================
+      "Spicy Raw Mango Pickle (Aam ka Achaar) Setup": {
+        category: "pickle",
+        badge: "🥒 Desi Preserves",
+        title: "📖 Recipe for Spicy Raw Mango Pickle (Aam ka Achaar) Setup",
+        steps: "Cut 1kg raw sour mangoes into bite-sized cubes, toss with 2 tbsp turmeric and 3 tbsp salt, and sun-dry on a cotton cloth for 5 hours to remove surface moisture. Coarsely grind roasted fennel, mustard seeds (rai), fenugreek (methi), and kalonji. Heat 2 cups pure mustard oil to smoking point, cool to lukewarm, mix with ground spices, kashmiri chili powder, and hing. Toss mangoes in spiced oil, transfer to a bone-dry glass jar, and sun-cure for 7 days. Ensure mangoes remain submerged in oil.",
+        macros: { cal: "65 kcal", protein: "0.5g", fat: "6g", carbs: "3g", fiber: "1.2g", chol: "0mg" },
+        ingredients: ["raw mango", "mango", "mustard oil", "saunf", "fennel", "methi", "kalonji", "turmeric", "salt", "chili"]
+      },
+      "Banarasi Stuffed Red Chilli Pickle Setup": {
+        category: "pickle",
+        badge: "🥒 Desi Preserves",
+        title: "📖 Recipe for Banarasi Stuffed Red Chilli Pickle Setup",
+        steps: "Wipe thick winter red chilies dry and slit lengthwise to remove seed core. Roast and coarsely grind fennel, yellow mustard, cumin, ajwain, coriander, amchur (dry mango powder), and salt. Mix ground spices with raw mustard oil to form a paste. Stuff tightly into each chili cavity, pack inside a sterile glass jar, submerge in hot mustard oil, and place in sunlight for 7 days.",
+        macros: { cal: "75 kcal", protein: "1g", fat: "7g", carbs: "4g", fiber: "1.5g", chol: "0mg" },
+        ingredients: ["red chili", "chili", "mustard oil", "amchur", "saunf", "fennel", "ajwain", "salt"]
+      },
+      "Green Chilli & Lemon Pickle Setup": {
+        category: "pickle",
+        badge: "🥒 Desi Preserves",
+        title: "📖 Recipe for Green Chilli & Lemon Pickle Setup",
+        steps: "Slit 200g fresh green chilies and chop 4 lemons into wedges. In a clean bowl, combine chilies, lemons, 2 tbsp salt, 1 tsp turmeric, and 2 tbsp split yellow mustard seeds. Squeeze juice of 3 extra lemons over the mixture as an acidic preservative. Shake daily; ready in 48 hours.",
+        macros: { cal: "25 kcal", protein: "0.4g", fat: "0.5g", carbs: "4.5g", fiber: "1.5g", chol: "0mg" },
+        ingredients: ["green chili", "chili", "lemon", "lime", "turmeric", "salt", "mustard seeds"]
+      },
+      "Winter Mixed Veg Pickle (Gajar Mooli Gobhi) Setup": {
+        category: "pickle",
+        badge: "🥒 Desi Preserves",
+        title: "📖 Recipe for Winter Mixed Veg Pickle (Gajar Mooli Gobhi) Setup",
+        steps: "Cut carrots, radish (mooli), and cauliflower into batons. Blanch for 2 minutes and sun-dry for 4 hours until bone dry. Heat mustard oil, add crushed ginger-garlic, mustard seeds, vinegar, jaggery (gur) syrup, and ground spices. Toss vegetables in spiced syrup and bottle in a sterile jar. Ready in 3 days.",
+        macros: { cal: "55 kcal", protein: "1.2g", fat: "3.5g", carbs: "7g", fiber: "2.5g", chol: "0mg" },
+        ingredients: ["carrot", "radish", "mooli", "cauliflower", "mustard oil", "vinegar", "jaggery", "ginger", "garlic", "salt"]
+      },
+      "Sweet & Sour Lemon Pickle (Oil-Free) Setup": {
+        category: "pickle",
+        badge: "🥒 Desi Preserves",
+        title: "📖 Recipe for Sweet & Sour Lemon Pickle (Oil-Free) Setup",
+        steps: "Cut thin-skinned juicy lemons into wedges. Toss thoroughly with rock salt, black salt, ajwain, black pepper, and sugar/jaggery. Pack into a sterile glass jar and place in direct sunlight for 15-20 days until lemon skins turn completely soft and translucent. 100% oil-free.",
+        macros: { cal: "45 kcal", protein: "0.3g", fat: "0.1g", carbs: "11g", fiber: "1.2g", chol: "0mg" },
+        ingredients: ["lemon", "sugar", "jaggery", "salt", "black salt", "ajwain", "black pepper"]
+      },
+      "Garlic Pickle (Lahsun ka Achaar) Setup": {
+        category: "pickle",
+        badge: "🥒 Desi Preserves",
+        title: "📖 Recipe for Garlic Pickle (Lahsun ka Achaar) Setup",
+        steps: "Peel 250g whole garlic cloves without moisture. Heat 1 cup mustard oil with hing and mustard seeds; lightly sauté garlic on low heat for 3 minutes until tender. Stir in turmeric, red chili powder, crushed fenugreek, amchur, and fresh lemon juice. Bottle in a glass jar. Cures in 4 days.",
+        macros: { cal: "80 kcal", protein: "1.5g", fat: "7g", carbs: "5g", fiber: "1g", chol: "0mg" },
+        ingredients: ["garlic", "mustard oil", "lemon", "chili", "methi", "turmeric", "salt"]
+      },
+      "Amla (Indian Gooseberry) Pickle Setup": {
+        category: "pickle",
+        badge: "🥒 Desi Preserves",
+        title: "📖 Recipe for Amla (Indian Gooseberry) Pickle Setup",
+        steps: "Steam 500g fresh amla for 8 minutes until segments separate easily; discard seeds and dry segments. Heat mustard oil, temper with fennel, mustard seeds, turmeric, kashmiri chili, and asafoetida. Toss amla segments in hot spiced oil and bottle. Rich in Vitamin C.",
+        macros: { cal: "50 kcal", protein: "0.6g", fat: "4g", carbs: "4g", fiber: "2g", chol: "0mg" },
+        ingredients: ["amla", "mustard oil", "fennel", "saunf", "turmeric", "chili", "salt"]
+      },
+      "Instant Mixed Vegetable Pickle Setup": {
+        category: "pickle",
+        badge: "🥒 Desi Preserves",
+        title: "📖 Recipe for Instant Mixed Vegetable Pickle Setup",
+        steps: "Thinly julienne carrots, cucumbers, and ginger. Temper 2 tbsp mustard oil with rai, kalonji, green chilies, and turmeric. Add veggies, sprinkle salt, amchur, and vinegar; toss on high heat for 2 minutes while keeping vegetables crunchy. Serve immediately.",
+        macros: { cal: "40 kcal", protein: "0.8g", fat: "2.5g", carbs: "5g", fiber: "1.8g", chol: "0mg" },
+        ingredients: ["carrot", "cucumber", "ginger", "green chili", "mustard oil", "vinegar", "salt"]
+      },
+
+      // =========================================================================
+      // 💪 30 FITNESS & DIET ITEMS
+      // =========================================================================
+      "Badam (Almond) Protein Shake Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Badam (Almond) Protein Shake Setup",
+        steps: "Soak 12 almonds overnight and peel. Blend with 1 scoop vanilla whey protein, 1 cup unsweetened almond milk, 1 tsp chia seeds, and cardamom powder. Serve chilled.",
+        macros: { cal: "310 kcal", protein: "28g", fat: "11g", carbs: "18g", fiber: "5g", chol: "5mg" },
+        ingredients: ["almond", "badam", "milk", "protein", "chia seeds", "cardamom"]
+      },
+      "Pistachio (Pista) Muscle Shake Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Pistachio (Pista) Muscle Shake Setup",
+        steps: "Soak 15 unsalted pistachios in warm water. Blend with 1 scoop whey protein, 1 cup unsweetened soy milk, and saffron strands for rich BCAAs and healthy fats.",
+        macros: { cal: "295 kcal", protein: "27g", fat: "12g", carbs: "16g", fiber: "4g", chol: "0mg" },
+        ingredients: ["pista", "pistachio", "milk", "protein", "saffron"]
+      },
+      "Oatmeal Peanut Butter Shake Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Oatmeal Peanut Butter Shake Setup",
+        steps: "Blend 1/2 cup rolled oats, 1 tbsp natural peanut butter, 1 banana, 1 scoop chocolate protein powder, and 1.5 cups skimmed milk. Ideal post-workout fuel.",
+        macros: { cal: "420 kcal", protein: "32g", fat: "12g", carbs: "48g", fiber: "7g", chol: "8mg" },
+        ingredients: ["oats", "peanut butter", "banana", "milk", "protein"]
+      },
+      "ABC (Apple Beetroot Carrot) Juice Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for ABC (Apple Beetroot Carrot) Juice Setup",
+        steps: "Cold-press 1 apple, 1 small raw beetroot, and 2 carrots with 1 inch fresh ginger. Squeeze half a lime and stir in a pinch of rock salt. Drink fresh.",
+        macros: { cal: "135 kcal", protein: "2g", fat: "0.5g", carbs: "31g", fiber: "6g", chol: "0mg" },
+        ingredients: ["apple", "beetroot", "carrot", "ginger", "lemon"]
+      },
+      "Green Detox Super Juice Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Green Detox Super Juice Setup",
+        steps: "Blend 1 cup spinach leaves, 1 diced cucumber, 1 green apple, fresh mint leaves, and 1 tbsp lemon juice with 100ml water. Drink unstrained for active dietary fiber.",
+        macros: { cal: "85 kcal", protein: "2.5g", fat: "0.4g", carbs: "19g", fiber: "4g", chol: "0mg" },
+        ingredients: ["spinach", "cucumber", "apple", "mint", "lemon"]
+      },
+      "Overnight Chia Protein Pudding Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Overnight Chia Protein Pudding Setup",
+        steps: "Mix 3 tbsp chia seeds, 1 scoop whey protein, and 1 cup almond milk. Refrigerate overnight. Top with fresh blueberries and 4 crushed walnuts.",
+        macros: { cal: "260 kcal", protein: "24g", fat: "10g", carbs: "19g", fiber: "11g", chol: "2mg" },
+        ingredients: ["chia seeds", "protein", "milk", "berries", "walnut"]
+      },
+      "Soya Chunks Stir-Fry Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Soya Chunks Stir-Fry Setup",
+        steps: "Boil 50g soya chunks in salted water, squeeze dry. Sauté in 1 tsp olive oil with crushed garlic, green chilies, onions, bell peppers, and black pepper. Finish with lemon juice.",
+        macros: { cal: "220 kcal", protein: "26g", fat: "4g", carbs: "18g", fiber: "7g", chol: "0mg" },
+        ingredients: ["soya chunks", "garlic", "onion", "capsicum", "pepper", "oil"]
+      },
+      "Sprouts Moong Salad Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Sprouts Moong Salad Setup",
+        steps: "Toss 1.5 cups sprouted moong beans with chopped cucumbers, tomatoes, green chillies, coriander, roasted cumin powder, pink salt, and fresh lemon juice.",
+        macros: { cal: "155 kcal", protein: "11g", fat: "1g", carbs: "26g", fiber: "8g", chol: "0mg" },
+        ingredients: ["sprouts", "moong", "cucumber", "tomato", "lemon", "chili"]
+      },
+      "Boiled Egg Whites & Pepper Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Boiled Egg Whites & Pepper Setup",
+        steps: "Boil 5 whole eggs for 9 minutes. Discard yolks and chop the 5 egg whites. Season with Himalayan pink salt, crushed black pepper, and oregano.",
+        macros: { cal: "90 kcal", protein: "20g", fat: "0.5g", carbs: "1g", fiber: "0g", chol: "0mg" },
+        ingredients: ["egg", "eggs", "pepper", "salt"]
+      },
+      "Grilled Chicken Breast Bowl Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Grilled Chicken Breast Bowl Setup",
+        steps: "Marinate 180g skinless chicken breast with lemon juice, garlic paste, rosemary, and 1 tsp olive oil. Grill on a hot ridged pan for 5-6 minutes per side.",
+        macros: { cal: "240 kcal", protein: "46g", fat: "5g", carbs: "1g", fiber: "0g", chol: "115mg" },
+        ingredients: ["chicken", "garlic", "lemon", "olive oil"]
+      },
+      "Quinoa Paneer Salad Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Quinoa Paneer Salad Setup",
+        steps: "Boil 1/2 cup quinoa until fluffy. Toss with 60g grilled low-fat paneer cubes, cherry tomatoes, cucumber, parsley, 1 tsp extra virgin olive oil, and lemon juice.",
+        macros: { cal: "310 kcal", protein: "18g", fat: "11g", carbs: "34g", fiber: "5g", chol: "18mg" },
+        ingredients: ["quinoa", "paneer", "tomato", "cucumber", "lemon"]
+      },
+      "Avocado Keto Salad Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Avocado Keto Salad Setup",
+        steps: "Dice 1 whole ripe avocado, toss with baby spinach, cucumber slices, pumpkin seeds, 1 tsp olive oil, and apple cider vinegar.",
+        macros: { cal: "280 kcal", protein: "4g", fat: "25g", carbs: "12g", fiber: "9g", chol: "0mg" },
+        ingredients: ["avocado", "spinach", "cucumber", "seeds", "olive oil"]
+      },
+      "Greek Yogurt Berry Parfait Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Greek Yogurt Berry Parfait Setup",
+        steps: "Layer 200g zero-fat plain Greek yogurt with sliced strawberries, blueberries, 1 tsp flax seeds, and 1 tsp organic raw honey.",
+        macros: { cal: "190 kcal", protein: "21g", fat: "1g", carbs: "22g", fiber: "3g", chol: "5mg" },
+        ingredients: ["yogurt", "curd", "honey", "berries", "strawberry"]
+      },
+      "Grilled Tofu & Broccoli Bowl Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Grilled Tofu & Broccoli Bowl Setup",
+        steps: "Pan-sear 150g firm tofu cubes in 1/2 tsp sesame oil. Steam 1 cup broccoli florets. Toss both in low-sodium soy sauce, garlic flakes, and toasted sesame seeds.",
+        macros: { cal: "210 kcal", protein: "20g", fat: "10g", carbs: "9g", fiber: "5g", chol: "0mg" },
+        ingredients: ["tofu", "broccoli", "soy sauce", "garlic", "sesame"]
+      },
+      "Besan Chilla (Gram Flour Pancake) Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Besan Chilla (Gram Flour Pancake) Setup",
+        steps: "Whisk 1/2 cup gram flour (besan) with water, grated paneer, ajwain, onions, green chillies, and turmeric. Cook on a tawa with 1/2 tsp ghee until golden.",
+        macros: { cal: "210 kcal", protein: "12g", fat: "6g", carbs: "27g", fiber: "5g", chol: "8mg" },
+        ingredients: ["besan", "gram flour", "paneer", "onion", "chili", "ghee"]
+      },
+      "Steamed Fish Fillet Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Steamed Fish Fillet Setup",
+        steps: "Place 180g white fish (basa/cod) on ginger juliennes in a steamer. Steam for 8-10 mins. Drizzle 1 tsp light soy sauce, sesame oil, and scallions.",
+        macros: { cal: "190 kcal", protein: "38g", fat: "3.5g", carbs: "1g", fiber: "0g", chol: "70mg" },
+        ingredients: ["fish", "ginger", "soy sauce", "oil"]
+      },
+      "Oats & Egg Scramble Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Oats & Egg Scramble Setup",
+        steps: "Dry roast 3 tbsp oats. Beat 3 egg whites + 1 whole egg. Sauté garlic, spinach, and mushrooms, add oats and beaten eggs; scramble together over low heat.",
+        macros: { cal: "260 kcal", protein: "22g", fat: "7g", carbs: "24g", fiber: "4g", chol: "185mg" },
+        ingredients: ["oats", "egg", "eggs", "spinach", "garlic"]
+      },
+      "Keto Paneer Bhurji Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Keto Paneer Bhurji Setup",
+        steps: "Crumble 100g fresh paneer. Sauté in 1 tsp ghee with cumin, chopped ginger, green chilies, and turmeric. Season with pink salt and fresh coriander.",
+        macros: { cal: "290 kcal", protein: "18g", fat: "22g", carbs: "4g", fiber: "1g", chol: "45mg" },
+        ingredients: ["paneer", "ghee", "ginger", "chili", "coriander"]
+      },
+      "Chicken & Clear Vegetable Soup Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Chicken & Clear Vegetable Soup Setup",
+        steps: "Simmer 150g bone-in chicken breast with minced garlic, crushed pepper, carrots, celery, and cabbage for 20 mins. Shred chicken and season broth.",
+        macros: { cal: "160 kcal", protein: "28g", fat: "3g", carbs: "5g", fiber: "2g", chol: "65mg" },
+        ingredients: ["chicken", "garlic", "pepper", "carrot", "cabbage"]
+      },
+      "Diet Paneer Tikka Bowl Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Diet Paneer Tikka Bowl Setup",
+        steps: "Marinate 120g low-fat paneer and capsicum in hung curd, ginger-garlic, turmeric, and chaat masala. Air fry at 190°C for 10 minutes without oil.",
+        macros: { cal: "230 kcal", protein: "22g", fat: "9g", carbs: "8g", fiber: "2g", chol: "20mg" },
+        ingredients: ["paneer", "capsicum", "curd", "yogurt", "ginger", "garlic"]
+      },
+      "Papaya Lime Digestif Bowl Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Papaya Lime Digestif Bowl Setup",
+        steps: "Chop 1.5 cups fresh ripe papaya. Squeeze lime juice and dust with roasted cumin and black salt. Natural papain enzymes boost protein digestion.",
+        macros: { cal: "80 kcal", protein: "1g", fat: "0.3g", carbs: "20g", fiber: "4g", chol: "0mg" },
+        ingredients: ["papaya", "lemon", "salt"]
+      },
+      "Golden Haldi Milk Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Golden Haldi Milk Setup",
+        steps: "Simmer 1 cup unsweetened almond or skimmed milk with 1/2 tsp turmeric, 1 cardamom, black pepper, and honey.",
+        macros: { cal: "90 kcal", protein: "4g", fat: "2.5g", carbs: "8g", fiber: "1g", chol: "2mg" },
+        ingredients: ["milk", "turmeric", "haldi", "ginger", "pepper", "honey"]
+      },
+      "Cold-Pressed Cucumber Cooler Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Cold-Pressed Cucumber Cooler Setup",
+        steps: "Juice 2 whole cucumbers with 10 mint leaves and 1/2 lime. Pour over ice without sugar to flush sodium and hydrate.",
+        macros: { cal: "45 kcal", protein: "1.5g", fat: "0.2g", carbs: "9g", fiber: "2g", chol: "0mg" },
+        ingredients: ["cucumber", "mint", "lemon", "ice"]
+      },
+      "Boiled Kala Chana Chaat Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Boiled Kala Chana Chaat Setup",
+        steps: "Toss 1 cup boiled black chickpeas with diced onions, tomatoes, green chillies, rock salt, amchur powder, and lemon juice.",
+        macros: { cal: "210 kcal", protein: "12g", fat: "3g", carbs: "35g", fiber: "10g", chol: "0mg" },
+        ingredients: ["chana", "chickpeas", "onion", "tomato", "lemon", "chili"]
+      },
+      "Egg Spinach Keto Wrap Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Egg Spinach Keto Wrap Setup",
+        steps: "Whisk 3 egg whites with chopped spinach. Cook like a flat crepe on a non-stick pan. Roll inside sliced avocado and grilled paneer.",
+        macros: { cal: "170 kcal", protein: "18g", fat: "8g", carbs: "3g", fiber: "2g", chol: "0mg" },
+        ingredients: ["egg", "eggs", "spinach", "avocado", "paneer"]
+      },
+      "Garlic Herb Mushrooms Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Garlic Herb Mushrooms Setup",
+        steps: "Sauté 200g sliced button mushrooms in 1/2 tsp olive oil with 4 cloves minced garlic and black pepper until browned and tender.",
+        macros: { cal: "85 kcal", protein: "6g", fat: "2.5g", carbs: "8g", fiber: "3g", chol: "0mg" },
+        ingredients: ["mushroom", "garlic", "olive oil", "pepper"]
+      },
+      "Sattu Protein Drink Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Sattu Protein Drink Setup",
+        steps: "Stir 3 tbsp roasted gram flour (sattu) in 1 glass chilled water. Add 1/2 tsp roasted cumin powder, black salt, chopped mint, and lemon juice.",
+        macros: { cal: "160 kcal", protein: "11g", fat: "2.5g", carbs: "24g", fiber: "6g", chol: "0mg" },
+        ingredients: ["sattu", "water", "lemon", "mint", "cumin"]
+      },
+      "Morning Lemon Chia Water Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Morning Lemon Chia Water Setup",
+        steps: "Soak 1 tbsp chia seeds in 1 glass warm water for 15 mins until gelatinous. Squeeze fresh lemon juice. Great pre-breakfast digestion drink.",
+        macros: { cal: "60 kcal", protein: "2.5g", fat: "3.5g", carbs: "5g", fiber: "4.5g", chol: "0mg" },
+        ingredients: ["chia seeds", "water", "lemon"]
+      },
+      "High-Protein Tuna Salad Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for High-Protein Tuna Salad Setup",
+        steps: "Drain canned tuna in spring water (150g). Mix with chopped red onions, celery, black pepper, Dijon mustard, and a squeeze of lime juice.",
+        macros: { cal: "180 kcal", protein: "36g", fat: "2g", carbs: "1g", fiber: "0.5g", chol: "55mg" },
+        ingredients: ["tuna", "fish", "onion", "lemon", "pepper"]
+      },
+      "Peanut Butter Protein Oats Setup": {
+        category: "diet",
+        badge: "💪 Fitness & Diet",
+        title: "📖 Recipe for Peanut Butter Protein Oats Setup",
+        steps: "Cook 1/2 cup rolled oats in water or skimmed milk for 4 minutes. Stir in 1 scoop vanilla whey protein and 1 tsp natural peanut butter.",
+        macros: { cal: "330 kcal", protein: "30g", fat: "7g", carbs: "38g", fiber: "5g", chol: "5mg" },
+        ingredients: ["oats", "peanut butter", "milk", "protein"]
+      },
+
+      // =========================================================================
+      // 🥗 35 VEGETARIAN DELIGHTS ITEMS (Including Indian Breads & Tiffin)
+      // =========================================================================
+      "Chapati Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Chapati Setup",
+        steps: "Knead 2 cups whole wheat flour (atta) with water and 1 tsp oil into a soft, pliable dough; rest for 15 minutes. Pinch small balls, roll thin with a rolling pin using dry flour dusting. Place on a hot tawa, flip once light bubbles appear, press gently with a cloth or place directly on open flame until it puffs up completely. Apply fresh ghee.",
+        macros: { cal: "110 kcal", protein: "3.5g", fat: "1g", carbs: "22g", fiber: "3.5g", chol: "0mg" },
+        ingredients: ["wheat flour", "atta", "water", "ghee", "oil"]
+      },
+      "Poori Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Poori Setup",
+        steps: "Knead 2 cups whole wheat flour, 1 tbsp semolina (sooji for crispiness), 1 tsp oil, and a pinch of salt with water into a tight, firm dough. Roll small medium-thick discs without dry flour (use oil). Slide gently into smoking-hot oil, press lightly with a slotted spoon until puffed balloon-like, flip, fry for 20 seconds, and drain.",
+        macros: { cal: "140 kcal", protein: "2.8g", fat: "7.5g", carbs: "16g", fiber: "2g", chol: "0mg" },
+        ingredients: ["wheat flour", "atta", "sooji", "oil", "salt"]
+      },
+      "Khasta Kachori Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Khasta Kachori Setup",
+        steps: "Knead all-purpose flour (maida) with generous ghee (moyen) and cold water into a semi-soft dough. Prepare spicy filling using coarse soaked moong dal sautéed with besan, hing, fennel, garam masala, and amchur. Stuff balls, seal carefully, flatten with palms, and deep-fry on very low flame for 18-20 minutes until extra flaky and golden.",
+        macros: { cal: "260 kcal", protein: "5.5g", fat: "14g", carbs: "28g", fiber: "2.5g", chol: "12mg" },
+        ingredients: ["flour", "moong dal", "besan", "ghee", "oil", "hing", "fennel", "amchur"]
+      },
+      "Idli & Sambar Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Idli & Sambar Setup",
+        steps: "Steam fermented rice and urad dal batter in greased idli plates for 10-12 minutes until soft and spongy. In a pot, boil toor dal with drumsticks, pumpkin, and shallots. Add tamarind pulp and sambar powder. Temper with mustard seeds, curry leaves, hing, and dried red chilies in ghee. Pour hot sambar over steaming idlis.",
+        macros: { cal: "220 kcal", protein: "7.5g", fat: "3g", carbs: "42g", fiber: "5g", chol: "0mg" },
+        ingredients: ["rice", "urad dal", "toor dal", "tamarind", "mustard seeds", "curry leaves", "sambar powder", "vegetables"]
+      },
+      "Tandoori Naan Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Tandoori Naan Setup",
+        steps: "Knead all-purpose flour (maida) with curd, baking soda, baking powder, sugar, salt, and milk into a soft dough; rest for 2 hours. Roll tear-drop shaped naans, sprinkle nigella seeds (kalonji) and coriander. Brush water on the underside, stick onto a smoking hot iron tawa, flip the tawa upside down directly over gas flames to cook and blister. Brush with melted butter.",
+        macros: { cal: "240 kcal", protein: "6g", fat: "6g", carbs: "41g", fiber: "1.5g", chol: "15mg" },
+        ingredients: ["flour", "curd", "yogurt", "milk", "baking soda", "butter", "kalonji", "coriander"]
+      },
+      "Palak Paneer Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Palak Paneer Setup",
+        steps: "Blanch spinach in hot water and blend with green chilies into a puree. Sauté cumin, garlic, and onions in ghee. Stir in spinach puree and paneer cubes; finish with cream.",
+        macros: { cal: "280 kcal", protein: "16g", fat: "20g", carbs: "9g", fiber: "4g", chol: "40mg" },
+        ingredients: ["paneer", "spinach", "palak", "garlic", "onion", "ghee"]
+      },
+      "Veg Burger Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Veg Burger Setup",
+        steps: "Shape mashed spiced potato, peas, and corn into a patty; coat with breadcrumbs and shallow fry. Toast burger buns, add patty, lettuce, sliced onion, tomato, and cheese.",
+        macros: { cal: "410 kcal", protein: "9g", fat: "18g", carbs: "54g", fiber: "4g", chol: "25mg" },
+        ingredients: ["burger bun", "bread", "potato", "cheese", "peas", "onion", "tomato"]
+      },
+      "Veg Fried Rice Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Veg Fried Rice Setup",
+        steps: "Sauté finely chopped garlic, beans, and carrots in sesame oil. Add cold cooked basmati rice, soy sauce, black pepper, and vinegar. Stir-fry on high flame.",
+        macros: { cal: "310 kcal", protein: "6g", fat: "8g", carbs: "54g", fiber: "3g", chol: "0mg" },
+        ingredients: ["rice", "carrot", "beans", "garlic", "soy sauce", "oil"]
+      },
+      "Chilli Paneer Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Chilli Paneer Setup",
+        steps: "Coat paneer in cornflour and shallow fry. Sauté diced onions, capsicum, garlic, and green chilies in sesame oil. Toss in soy sauce, vinegar, and chili sauce.",
+        macros: { cal: "340 kcal", protein: "14g", fat: "22g", carbs: "18g", fiber: "2g", chol: "35mg" },
+        ingredients: ["paneer", "capsicum", "onion", "garlic", "soy sauce", "chili"]
+      },
+      "White Sauce Pasta Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for White Sauce Pasta Setup",
+        steps: "Melt 2 tbsp butter, stir in 2 tbsp flour for 1 minute, slowly whisk in 1.5 cups milk until smooth. Add boiled pasta, sweet corn, capsicum, chili flakes, and cheese.",
+        macros: { cal: "460 kcal", protein: "12g", fat: "24g", carbs: "52g", fiber: "3g", chol: "45mg" },
+        ingredients: ["pasta", "milk", "butter", "flour", "cheese", "capsicum", "corn"]
+      },
+      "Paneer Butter Masala Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Paneer Butter Masala Setup",
+        steps: "Blend sautéed tomatoes, onions, and cashews into a paste. Cook in butter with spices, add fresh paneer cubes, heavy cream, and crushed kasuri methi.",
+        macros: { cal: "410 kcal", protein: "15g", fat: "32g", carbs: "14g", fiber: "3g", chol: "60mg" },
+        ingredients: ["paneer", "butter", "tomato", "onion", "cream", "cashew"]
+      },
+      "Paneer Tikka Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Paneer Tikka Setup",
+        steps: "Marinate paneer cubes, bell peppers, and onions in spiced hung curd with mustard oil and chaat masala. Skewer and roast on high heat in a pan or oven until charred.",
+        macros: { cal: "290 kcal", protein: "17g", fat: "19g", carbs: "11g", fiber: "2.5g", chol: "38mg" },
+        ingredients: ["paneer", "curd", "yogurt", "capsicum", "onion", "oil"]
+      },
+      "Matar Paneer Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Matar Paneer Setup",
+        steps: "Sauté cumin, onions, ginger-garlic, and pureed tomatoes with turmeric and coriander powder. Add green peas, 1 cup water, and paneer cubes; simmer for 8 mins.",
+        macros: { cal: "310 kcal", protein: "14g", fat: "18g", carbs: "22g", fiber: "5g", chol: "32mg" },
+        ingredients: ["paneer", "peas", "matar", "tomato", "onion", "ginger"]
+      },
+      "Mumbai Pav Bhaji Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Mumbai Pav Bhaji Setup",
+        steps: "Boil and mash potatoes, cauliflower, and peas. Sauté onions, tomatoes, and capsicum with generous butter and Pav Bhaji masala. Serve with butter-toasted pav.",
+        macros: { cal: "390 kcal", protein: "8g", fat: "16g", carbs: "54g", fiber: "7g", chol: "30mg" },
+        ingredients: ["potato", "pav", "bread", "butter", "tomato", "peas", "capsicum"]
+      },
+      "Punjabi Chole Bhature Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Punjabi Chole Bhature Setup",
+        steps: "Pressure cook soaked chickpeas with tea water. Sauté onions, garlic, tomato paste, chole masala, and amchur. Simmer chickpeas in spicy gravy for 15 minutes.",
+        macros: { cal: "520 kcal", protein: "15g", fat: "22g", carbs: "68g", fiber: "11g", chol: "0mg" },
+        ingredients: ["chole", "chickpeas", "flour", "onion", "tomato", "garlic"]
+      },
+      "Margherita Pizza Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Margherita Pizza Setup",
+        steps: "Spread tomato herb sauce over rolled dough base. Layer with shredded mozzarella and sliced tomatoes. Bake at 220°C for 10 minutes and top with fresh basil leaves.",
+        macros: { cal: "430 kcal", protein: "16g", fat: "18g", carbs: "50g", fiber: "3g", chol: "40mg" },
+        ingredients: ["cheese", "mozzarella", "tomato", "flour", "pizza base"]
+      },
+      "Red Sauce Pasta Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Red Sauce Pasta Setup",
+        steps: "Sauté minced garlic and chili flakes in olive oil. Add pureed tomatoes, salt, and oregano; simmer until thick. Toss in boiled penne pasta and grated parmesan.",
+        macros: { cal: "350 kcal", protein: "10g", fat: "9g", carbs: "58g", fiber: "4g", chol: "10mg" },
+        ingredients: ["pasta", "tomato", "garlic", "olive oil", "cheese"]
+      },
+      "Veg Hakka Noodles Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Veg Hakka Noodles Setup",
+        steps: "Stir-fry shredded cabbage, capsicum, and carrots on high heat. Add boiled noodles, soy sauce, green chili sauce, and vinegar; toss vigorously for 2 minutes.",
+        macros: { cal: "330 kcal", protein: "7g", fat: "11g", carbs: "52g", fiber: "4g", chol: "0mg" },
+        ingredients: ["noodles", "cabbage", "capsicum", "carrot", "soy sauce"]
+      },
+      "Aloo Paratha Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Aloo Paratha Setup",
+        steps: "Mash boiled potatoes with green chillies, coriander, salt, and garam masala. Stuff into wheat dough balls, roll flat, and roast on a tawa with ghee.",
+        macros: { cal: "320 kcal", protein: "6g", fat: "13g", carbs: "46g", fiber: "5g", chol: "20mg" },
+        ingredients: ["potato", "wheat flour", "flour", "ghee", "chili"]
+      },
+      "Yellow Tadka Dal Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Yellow Tadka Dal Setup",
+        steps: "Pressure cook yellow lentils with turmeric and salt. Temper hot ghee with cumin, garlic, dried red chilies, hing, and chopped tomatoes. Pour over cooked dal.",
+        macros: { cal: "190 kcal", protein: "10g", fat: "6g", carbs: "26g", fiber: "6g", chol: "12mg" },
+        ingredients: ["dal", "lentils", "garlic", "ghee", "tomato", "cumin"]
+      },
+      "Veg Grilled Sandwich Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Veg Grilled Sandwich Setup",
+        steps: "Spread mint chutney and butter on bread slices. Add cucumber, boiled potato, onion, and cheese slices with chaat masala. Grill with butter until crispy.",
+        macros: { cal: "290 kcal", protein: "8g", fat: "12g", carbs: "38g", fiber: "3.5g", chol: "22mg" },
+        ingredients: ["bread", "butter", "cheese", "potato", "cucumber", "onion"]
+      },
+      "Cheese Garlic Bread Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Cheese Garlic Bread Setup",
+        steps: "Mix softened butter with minced garlic and herbs. Spread on baguette or bread slices, cover with mozzarella cheese, and bake at 200°C for 7 minutes.",
+        macros: { cal: "260 kcal", protein: "8g", fat: "14g", carbs: "26g", fiber: "1.5g", chol: "28mg" },
+        ingredients: ["bread", "garlic", "butter", "cheese", "mozzarella"]
+      },
+      "Crispy French Fries Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Crispy French Fries Setup",
+        steps: "Cut potatoes into strips, soak in cold water for 20 mins, and dry thoroughly. Deep fry on medium heat until tender, let rest 5 mins, then flash-fry until crisp.",
+        macros: { cal: "310 kcal", protein: "3.5g", fat: "15g", carbs: "41g", fiber: "4g", chol: "0mg" },
+        ingredients: ["potato", "oil", "salt"]
+      },
+      "Veg Fried Momos Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Veg Fried Momos Setup",
+        steps: "Stuff rolled flour sheets with minced cabbage, carrots, ginger, and soy sauce; fold into pleats. Steam for 8 mins, then deep-fry in hot oil until golden.",
+        macros: { cal: "280 kcal", protein: "6g", fat: "13g", carbs: "36g", fiber: "3g", chol: "0mg" },
+        ingredients: ["flour", "cabbage", "carrot", "ginger", "soy sauce", "oil"]
+      },
+      "Masala Maggi Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Masala Maggi Setup",
+        steps: "Sauté onions, tomatoes, and peas in butter. Add 1.5 cups water, Maggi tastemaker, and noodles. Simmer on medium heat for 2-3 minutes until rich and soupy.",
+        macros: { cal: "340 kcal", protein: "7g", fat: "13g", carbs: "48g", fiber: "3g", chol: "10mg" },
+        ingredients: ["maggi", "noodles", "butter", "onion", "tomato", "peas"]
+      },
+      "Rasmalai Classic Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Rasmalai Classic Setup",
+        steps: "Knead chenna into flat discs and boil in thin sugar syrup. Simmer full cream milk with saffron, sugar, and cardamom until reduced to rabri. Soak chilled discs in rabri.",
+        macros: { cal: "260 kcal", protein: "7g", fat: "9g", carbs: "38g", fiber: "0.5g", chol: "24mg" },
+        ingredients: ["milk", "sugar", "paneer", "chenna", "saffron", "cardamom"]
+      },
+      "Gulab Jamun Classic Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Gulab Jamun Classic Setup",
+        steps: "Knead mawa/khoya and flour into smooth crack-free balls. Deep fry on low flame in ghee until dark golden brown. Drop immediately into warm cardamom sugar syrup.",
+        macros: { cal: "300 kcal", protein: "4g", fat: "12g", carbs: "46g", fiber: "0.5g", chol: "28mg" },
+        ingredients: ["mawa", "khoya", "flour", "sugar", "ghee", "cardamom"]
+      },
+      "Eggless Chocolate Cake Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Eggless Chocolate Cake Setup",
+        steps: "Whisk 1 cup flour, 1/2 cup cocoa powder, 1 cup sugar, 1 tsp baking powder, 1/2 cup milk, and 1/3 cup melted butter. Bake in a preheated oven at 180°C for 30 minutes.",
+        macros: { cal: "360 kcal", protein: "5g", fat: "16g", carbs: "52g", fiber: "3g", chol: "30mg" },
+        ingredients: ["flour", "cocoa powder", "chocolate", "sugar", "milk", "butter"]
+      },
+      "Fudgy Chocolate Brownie Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Fudgy Chocolate Brownie Setup",
+        steps: "Melt dark chocolate with butter. Stir with sugar, warm milk, vanilla, and flour. Pour into a square parchment-lined tin and bake at 170°C for 20 minutes.",
+        macros: { cal: "330 kcal", protein: "4g", fat: "18g", carbs: "40g", fiber: "2.5g", chol: "35mg" },
+        ingredients: ["chocolate", "butter", "sugar", "flour", "milk"]
+      },
+      "Fluffy Pancakes Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Fluffy Pancakes Setup",
+        steps: "Whisk 1 cup flour, 1 tbsp sugar, 1 tsp baking powder, and 3/4 cup milk into a thick batter. Cook spoonfuls on a buttered pan until bubbly, flip, and drizzle with maple syrup.",
+        macros: { cal: "250 kcal", protein: "6g", fat: "7g", carbs: "41g", fiber: "1.5g", chol: "18mg" },
+        ingredients: ["flour", "milk", "sugar", "butter", "honey"]
+      },
+      "Crispy Onion Pakoda Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Crispy Onion Pakoda Setup",
+        steps: "Thinly slice onions and mix with besan, rice flour, ajwain, green chilies, and salt without extra water. Drop small clumps into hot oil and fry until crunchy.",
+        macros: { cal: "240 kcal", protein: "5g", fat: "14g", carbs: "24g", fiber: "4g", chol: "0mg" },
+        ingredients: ["onion", "besan", "gram flour", "oil", "chili"]
+      },
+      "Crispy Masala Dosa Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Crispy Masala Dosa Setup",
+        steps: "Pour fermented rice-urad dal batter on a hot tawa and spread thin. Drizzle ghee, cook until crisp, stuff with spiced mashed potatoes, and serve with coconut chutney.",
+        macros: { cal: "320 kcal", protein: "6g", fat: "10g", carbs: "51g", fiber: "4g", chol: "8mg" },
+        ingredients: ["rice", "dal", "potato", "ghee", "coconut"]
+      },
+      "Fresh Guacamole & Chips Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Fresh Guacamole & Chips Setup",
+        steps: "Mash ripe avocados with lime juice, chopped red onions, tomatoes, jalapeños, and cilantro. Season with sea salt and serve fresh with crispy tortilla corn chips.",
+        macros: { cal: "270 kcal", protein: "3.5g", fat: "18g", carbs: "26g", fiber: "7g", chol: "0mg" },
+        ingredients: ["avocado", "onion", "tomato", "lemon", "chips"]
+      },
+      "Veg Pulao Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Veg Pulao Setup",
+        steps: "Sauté bay leaf, cloves, and cardamom in ghee. Add sliced onions, ginger-garlic paste, mixed diced veggies, soaked basmati rice, and water; cook for 15 minutes.",
+        macros: { cal: "290 kcal", protein: "5g", fat: "8g", carbs: "50g", fiber: "4g", chol: "10mg" },
+        ingredients: ["rice", "carrot", "peas", "onion", "ghee"]
+      },
+      "Spanish Tomato Tango Chaat Setup": {
+        category: "veg",
+        badge: "🥗 Veg Delights",
+        title: "📖 Recipe for Spanish Tomato Tango Chaat Setup",
+        steps: "Crush a bag of Spanish Tomato Tango chips onto a platter. Top with diced onions, tomatoes, chopped cilantro, fresh lemon juice, and a handful of crunchy sev.",
+        macros: { cal: "210 kcal", protein: "2.5g", fat: "12g", carbs: "23g", fiber: "2g", chol: "0mg" },
+        ingredients: ["chips", "onion", "tomato", "lemon", "sev"]
+      },
+
+      // =========================================================================
+      // 🍗 30 NON-VEG HIGH PROTEIN ITEMS
+      // =========================================================================
+      "Butter Chicken Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Butter Chicken Setup",
+        steps: "Sear marinated chicken chunks in a pan. In another pan, simmer pureed tomatoes, cashew paste, butter, and cream with garam masala. Simmer together for 6 minutes.",
+        macros: { cal: "480 kcal", protein: "36g", fat: "30g", carbs: "12g", fiber: "2g", chol: "130mg" },
+        ingredients: ["chicken", "butter", "tomato", "cream", "cashew"]
+      },
+      "Hyderabadi Chicken Biryani Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Hyderabadi Chicken Biryani Setup",
+        steps: "Layer marinated spiced chicken with parboiled basmati rice, fried onions, saffron milk, and ghee. Cook tightly sealed on dum for 25 minutes.",
+        macros: { cal: "540 kcal", protein: "32g", fat: "18g", carbs: "62g", fiber: "3g", chol: "95mg" },
+        ingredients: ["chicken", "rice", "curd", "onion", "ghee", "saffron"]
+      },
+      "Masala Omelette Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Masala Omelette Setup",
+        steps: "Whisk 2 whole eggs with finely chopped onions, tomatoes, green chillies, coriander, and spices. Fry in butter until fluffy and cooked on both sides.",
+        macros: { cal: "210 kcal", protein: "14g", fat: "16g", carbs: "3g", fiber: "1g", chol: "370mg" },
+        ingredients: ["egg", "eggs", "butter", "onion", "tomato", "chili"]
+      },
+      "Homestyle Chicken Curry Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Homestyle Chicken Curry Setup",
+        steps: "Sauté sliced onions, ginger-garlic paste, and tomato puree with turmeric and coriander powder. Add 300g bone-in chicken, sear well, add 1 cup water, and simmer for 15 mins.",
+        macros: { cal: "360 kcal", protein: "38g", fat: "18g", carbs: "8g", fiber: "2g", chol: "105mg" },
+        ingredients: ["chicken", "onion", "tomato", "ginger", "garlic", "oil"]
+      },
+      "Chicken Tikka Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Chicken Tikka Setup",
+        steps: "Marinate boneless chicken cubes in hung curd, tandoori masala, mustard oil, lemon juice, and garlic paste. Thread onto skewers and bake or grill at 220°C for 15 mins.",
+        macros: { cal: "280 kcal", protein: "38g", fat: "11g", carbs: "6g", fiber: "1.5g", chol: "90mg" },
+        ingredients: ["chicken", "curd", "yogurt", "garlic", "lemon", "oil"]
+      },
+      "Crispy Fried Wings Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Crispy Fried Wings Setup",
+        steps: "Season chicken wings with garlic powder, paprika, and salt. Coat in seasoned flour and cornstarch, then deep fry at 170°C for 12 mins until crispy and toss in buffalo sauce.",
+        macros: { cal: "430 kcal", protein: "28g", fat: "29g", carbs: "14g", fiber: "1g", chol: "140mg" },
+        ingredients: ["chicken", "wings", "flour", "garlic", "oil"]
+      },
+      "Egg Fried Rice Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Egg Fried Rice Setup",
+        steps: "Scramble 2 eggs in a hot wok and set aside. Stir-fry finely chopped carrots, scallions, and garlic. Toss with cold cooked rice, scrambled eggs, soy sauce, and black pepper.",
+        macros: { cal: "360 kcal", protein: "14g", fat: "12g", carbs: "48g", fiber: "2.5g", chol: "190mg" },
+        ingredients: ["egg", "eggs", "rice", "carrot", "soy sauce", "garlic"]
+      },
+      "Dhaba Egg Curry Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Dhaba Egg Curry Setup",
+        steps: "Prick boiled eggs and shallow fry in turmeric oil until blistered. Prepare a rich onion-tomato masala with ginger-garlic and garam masala. Add fried eggs and simmer.",
+        macros: { cal: "270 kcal", protein: "15g", fat: "19g", carbs: "9g", fiber: "2g", chol: "375mg" },
+        ingredients: ["egg", "eggs", "onion", "tomato", "ginger", "garlic"]
+      },
+      "Chicken Shawarma Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Chicken Shawarma Setup",
+        steps: "Thinly slice chicken thighs marinated in yogurt, cumin, garlic, and sumac; pan-sear till charred. Wrap in pita bread with garlic toum, pickles, and crisp french fries.",
+        macros: { cal: "450 kcal", protein: "30g", fat: "20g", carbs: "38g", fiber: "3g", chol: "85mg" },
+        ingredients: ["chicken", "pita bread", "bread", "garlic", "curd", "yogurt"]
+      },
+      "Spicy Mutton Curry Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Spicy Mutton Curry Setup",
+        steps: "Sauté whole spices and sliced onions in mustard oil until dark brown. Add mutton pieces, ginger-garlic paste, and powdered spices. Pressure cook with water for 5 whistles.",
+        macros: { cal: "460 kcal", protein: "34g", fat: "32g", carbs: "7g", fiber: "2g", chol: "110mg" },
+        ingredients: ["mutton", "meat", "onion", "ginger", "garlic", "oil"]
+      },
+      "Shahi Chicken Korma Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Shahi Chicken Korma Setup",
+        steps: "Cook chicken in a paste of fried browned onions, yogurt, almond paste, cardamom, and kewra water on low heat until the oil separates and chicken is tender.",
+        macros: { cal: "440 kcal", protein: "35g", fat: "28g", carbs: "11g", fiber: "2.5g", chol: "115mg" },
+        ingredients: ["chicken", "curd", "yogurt", "onion", "almond", "cardamom"]
+      },
+      "Chicken Fried Rice Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Chicken Fried Rice Setup",
+        steps: "Stir-fry shredded cooked chicken, garlic, spring onions, and carrots in a wok. Add boiled chilled rice, light soy sauce, dark soy sauce, and white pepper; toss on high heat.",
+        macros: { cal: "410 kcal", protein: "26g", fat: "12g", carbs: "50g", fiber: "2.5g", chol: "65mg" },
+        ingredients: ["chicken", "rice", "garlic", "soy sauce", "carrot"]
+      },
+      "Chicken Hakka Noodles Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Chicken Hakka Noodles Setup",
+        steps: "Sauté sliced chicken breast until cooked. Add julienned bell peppers, cabbage, boiled noodles, chili sauce, soy sauce, and vinegar. Stir-fry vigorously on high heat.",
+        macros: { cal: "390 kcal", protein: "24g", fat: "13g", carbs: "46g", fiber: "3g", chol: "55mg" },
+        ingredients: ["chicken", "noodles", "cabbage", "capsicum", "soy sauce"]
+      },
+      "Crispy Chicken Burger Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Crispy Chicken Burger Setup",
+        steps: "Marinate chicken fillet in buttermilk, dredge in seasoned flour, and deep fry until crunchy. Place on toasted brioche buns with spicy mayo, lettuce, and sliced pickles.",
+        macros: { cal: "510 kcal", protein: "32g", fat: "24g", carbs: "42g", fiber: "2g", chol: "80mg" },
+        ingredients: ["chicken", "burger bun", "bread", "mayo", "flour", "oil"]
+      },
+      "Chicken Caesar Salad Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Chicken Caesar Salad Setup",
+        steps: "Toss torn crisp romaine lettuce, crunchy croutons, and grilled sliced chicken breast in Caesar dressing. Top with freshly shaved parmesan cheese and black pepper.",
+        macros: { cal: "340 kcal", protein: "34g", fat: "18g", carbs: "10g", fiber: "3g", chol: "85mg" },
+        ingredients: ["chicken", "lettuce", "cheese", "bread", "black pepper"]
+      },
+      "Mutton Keema Matar Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Mutton Keema Matar Setup",
+        steps: "Sauté minced mutton with chopped onions, ginger-garlic, tomatoes, green chilies, and garam masala. Add green peas, cover, and cook until tender and dry.",
+        macros: { cal: "410 kcal", protein: "30g", fat: "28g", carbs: "9g", fiber: "3g", chol: "95mg" },
+        ingredients: ["mutton", "keema", "meat", "peas", "onion", "tomato"]
+      },
+      "Spicy Chicken 65 Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Spicy Chicken 65 Setup",
+        steps: "Marinate bite-sized chicken in ginger, garlic, red chili paste, curd, and cornflour; deep fry until crisp. Temper curry leaves, green chilies, and garlic in oil and toss.",
+        macros: { cal: "350 kcal", protein: "32g", fat: "19g", carbs: "12g", fiber: "1.5g", chol: "90mg" },
+        ingredients: ["chicken", "curd", "garlic", "chili", "cornflour", "oil"]
+      },
+      "Steamed Chicken Momos Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Steamed Chicken Momos Setup",
+        steps: "Combine minced chicken with finely chopped onions, ginger, green chilies, and soy sauce. Wrap in thin rolled flour wrappers and steam in a momo steamer for 10 minutes.",
+        macros: { cal: "290 kcal", protein: "20g", fat: "9g", carbs: "32g", fiber: "2g", chol: "55mg" },
+        ingredients: ["chicken", "flour", "onion", "ginger", "soy sauce"]
+      },
+      "Mutton Seekh Kebab Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Mutton Seekh Kebab Setup",
+        steps: "Mix minced meat with finely chopped mint, coriander, onions, green chilies, and kebab spices. Press onto metal skewers and grill over hot coals or tawa until charred.",
+        macros: { cal: "310 kcal", protein: "28g", fat: "20g", carbs: "5g", fiber: "1.5g", chol: "75mg" },
+        ingredients: ["mutton", "chicken", "meat", "onion", "mint", "chili"]
+      },
+      "Spicy Egg Bhurji Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Spicy Egg Bhurji Setup",
+        steps: "Sauté onions, green chilies, and tomatoes in butter with turmeric and pav bhaji masala. Crack in 3 eggs and scramble continuously on medium heat until soft.",
+        macros: { cal: "250 kcal", protein: "18g", fat: "18g", carbs: "4g", fiber: "1g", chol: "550mg" },
+        ingredients: ["egg", "eggs", "onion", "tomato", "butter", "chili"]
+      },
+      "Chicken Club Sandwich Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Chicken Club Sandwich Setup",
+        steps: "Toast 3 slices of bread. Layer first with mayo, lettuce, tomato, and cooked chicken strips. Layer second slice with a fried egg and cheese. Stack and slice into triangles.",
+        macros: { cal: "480 kcal", protein: "34g", fat: "22g", carbs: "36g", fiber: "3g", chol: "220mg" },
+        ingredients: ["chicken", "bread", "egg", "eggs", "cheese", "mayo"]
+      },
+      "Tandoori Chicken Legs Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Tandoori Chicken Legs Setup",
+        steps: "Make cuts on chicken legs. Marinate in hung curd, lemon juice, kashmiri chili powder, ginger-garlic, and tandoori masala. Roast at 230°C for 25 minutes.",
+        macros: { cal: "330 kcal", protein: "42g", fat: "14g", carbs: "5g", fiber: "1g", chol: "135mg" },
+        ingredients: ["chicken", "curd", "yogurt", "ginger", "garlic", "lemon"]
+      },
+      "Crispy Chicken Popcorn Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Crispy Chicken Popcorn Setup",
+        steps: "Cut boneless chicken into small bites. Marinate in seasoned buttermilk, dredge in spiced flour/cornstarch, and deep-fry in batches until golden and super crispy.",
+        macros: { cal: "380 kcal", protein: "28g", fat: "20g", carbs: "22g", fiber: "1g", chol: "80mg" },
+        ingredients: ["chicken", "flour", "milk", "oil", "garlic"]
+      },
+      "Kolkata Egg Roll Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Kolkata Egg Roll Setup",
+        steps: "Cook a flat paratha on a tawa, pour beaten egg over it, and flip to stick together. Fill with sliced onions, green chilies, cucumber, chaat masala, and sauce; roll tightly.",
+        macros: { cal: "360 kcal", protein: "14g", fat: "16g", carbs: "40g", fiber: "2.5g", chol: "190mg" },
+        ingredients: ["egg", "eggs", "flour", "paratha", "onion", "cucumber"]
+      },
+      "Homemade Chicken Nuggets Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Homemade Chicken Nuggets Setup",
+        steps: "Blend chicken breast with garlic powder, onion powder, salt, and pepper into a paste. Shape into nuggets, dip in flour, egg, and breadcrumbs, and deep-fry until golden.",
+        macros: { cal: "340 kcal", protein: "24g", fat: "18g", carbs: "20g", fiber: "1g", chol: "70mg" },
+        ingredients: ["chicken", "flour", "egg", "eggs", "breadcrumbs", "oil"]
+      },
+      "Chicken Keema Paratha Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Chicken Keema Paratha Setup",
+        steps: "Cook minced chicken with ginger-garlic, garam masala, and mint until dry. Stuff inside rolled wheat dough balls, roll flat, and roast on tawa with ghee.",
+        macros: { cal: "360 kcal", protein: "22g", fat: "14g", carbs: "38g", fiber: "3g", chol: "65mg" },
+        ingredients: ["chicken", "wheat flour", "atta", "ghee", "ginger", "garlic"]
+      },
+      "Mutton Rogan Josh Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Mutton Rogan Josh Setup",
+        steps: "Slow-cook mutton pieces in mustard oil with Kashmiri red chili paste, fennel powder, ginger powder, and whisked curd until aromatic and tender.",
+        macros: { cal: "470 kcal", protein: "36g", fat: "34g", carbs: "6g", fiber: "1.5g", chol: "115mg" },
+        ingredients: ["mutton", "curd", "mustard oil", "fennel", "ginger", "chili"]
+      },
+      "Chicken Kothu Parotta Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Chicken Kothu Parotta Setup",
+        steps: "Shred layered parottas into bite pieces. Sauté onions, eggs, and cooked chicken curry on high heat, shredding vigorously with spatulas.",
+        macros: { cal: "510 kcal", protein: "28g", fat: "22g", carbs: "52g", fiber: "2.5g", chol: "190mg" },
+        ingredients: ["chicken", "egg", "paratha", "flour", "onion", "tomato"]
+      },
+      "Egg Masala Toast Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Egg Masala Toast Setup",
+        steps: "Dip bread slices in beaten eggs with onions, green chilies, coriander, and chat masala. Pan toast in butter until golden and crisp.",
+        macros: { cal: "240 kcal", protein: "12g", fat: "11g", carbs: "24g", fiber: "1.5g", chol: "195mg" },
+        ingredients: ["egg", "eggs", "bread", "butter", "onion", "chili"]
+      },
+      "Tandoori Chicken Wings Setup": {
+        category: "nonveg",
+        badge: "🍗 Non-Veg Protein",
+        title: "📖 Recipe for Tandoori Chicken Wings Setup",
+        steps: "Marinate chicken wings in tandoori masala, hung curd, lemon juice, and ginger paste. Bake at 220°C for 20 minutes until charred and crispy.",
+        macros: { cal: "360 kcal", protein: "30g", fat: "22g", carbs: "4g", fiber: "0.5g", chol: "120mg" },
+        ingredients: ["chicken", "wings", "curd", "lemon", "ginger", "garlic"]
+      },
+
+      // =========================================================================
+      // 🦀 10 SEAFOOD SPECIALTIES ITEMS
+      // =========================================================================
+      "Goan Fish Curry Setup": {
+        category: "seafood",
+        badge: "🦀 Seafood Specialties",
+        title: "📖 Recipe for Goan Fish Curry Setup",
+        steps: "Blend grated coconut, dried Kashmiri chilies, coriander seeds, and tamarind into a smooth paste. Simmer paste with coconut milk, add fresh fish pieces, and cook for 6 mins.",
+        macros: { cal: "320 kcal", protein: "28g", fat: "19g", carbs: "8g", fiber: "3g", chol: "60mg" },
+        ingredients: ["fish", "coconut milk", "coconut", "chili", "tamarind"]
+      },
+      "Spicy Prawn Masala Setup": {
+        category: "seafood",
+        badge: "🦀 Seafood Specialties",
+        title: "📖 Recipe for Spicy Prawn Masala Setup",
+        steps: "Sauté finely chopped onions, tomatoes, ginger-garlic, curry leaves, and black pepper in oil. Add cleaned deveined prawns and cook on high heat for 4-5 minutes.",
+        macros: { cal: "220 kcal", protein: "26g", fat: "9g", carbs: "7g", fiber: "2g", chol: "175mg" },
+        ingredients: ["prawn", "prawns", "onion", "tomato", "garlic", "ginger"]
+      },
+      "Tawa Fish Fry Setup": {
+        category: "seafood",
+        badge: "🦀 Seafood Specialties",
+        title: "📖 Recipe for Tawa Fish Fry Setup",
+        steps: "Coat fish steaks with turmeric, red chili powder, ginger-garlic paste, lemon juice, and rice flour. Pan-fry in hot oil on a flat tawa for 3-4 minutes per side.",
+        macros: { cal: "240 kcal", protein: "32g", fat: "10g", carbs: "5g", fiber: "1g", chol: "65mg" },
+        ingredients: ["fish", "ginger", "garlic", "lemon", "oil"]
+      },
+      "Prawn Tempura Setup": {
+        category: "seafood",
+        badge: "🦀 Seafood Specialties",
+        title: "📖 Recipe for Prawn Tempura Setup",
+        steps: "Straighten peeled tails-on prawns. Dip in an ice-cold batter of flour, cornstarch, egg yolk, and sparkling water. Flash fry in hot oil for 2 minutes until light and crispy.",
+        macros: { cal: "290 kcal", protein: "22g", fat: "14g", carbs: "18g", fiber: "0.5g", chol: "160mg" },
+        ingredients: ["prawn", "prawns", "flour", "egg", "eggs", "oil"]
+      },
+      "Lemon Butter Fish Setup": {
+        category: "seafood",
+        badge: "🦀 Seafood Specialties",
+        title: "📖 Recipe for Lemon Butter Fish Setup",
+        steps: "Season fish fillet with salt, pepper, and olive oil; pan-sear for 3 minutes each side. Pour melted butter, lemon juice, minced garlic, and fresh parsley over the top.",
+        macros: { cal: "280 kcal", protein: "34g", fat: "15g", carbs: "2g", fiber: "0g", chol: "90mg" },
+        ingredients: ["fish", "butter", "lemon", "garlic", "olive oil"]
+      },
+      "Butter Garlic Prawns Setup": {
+        category: "seafood",
+        badge: "🦀 Seafood Specialties",
+        title: "📖 Recipe for Butter Garlic Prawns Setup",
+        steps: "Sauté minced garlic in generous butter on medium flame until fragrant. Add cleaned prawns, chili flakes, and black pepper. Cook for 4 minutes and finish with fresh lemon juice and parsley.",
+        macros: { cal: "240 kcal", protein: "25g", fat: "14g", carbs: "3g", fiber: "0.5g", chol: "185mg" },
+        ingredients: ["prawn", "prawns", "butter", "garlic", "lemon", "chili"]
+      },
+      "Chettinad Crab Masala Setup": {
+        category: "seafood",
+        badge: "🦀 Seafood Specialties",
+        title: "📖 Recipe for Chettinad Crab Masala Setup",
+        steps: "Roast and grind black pepper, fennel, cumin, and shallots into a coarse masala. Sauté in sesame oil with curry leaves, tomato puree, and cracked fresh crab pieces. Simmer with 1/2 cup water until thick.",
+        macros: { cal: "210 kcal", protein: "24g", fat: "8g", carbs: "9g", fiber: "2g", chol: "95mg" },
+        ingredients: ["crab", "black pepper", "fennel", "onion", "tomato", "curry leaves"]
+      },
+      "Fish Tikka Setup": {
+        category: "seafood",
+        badge: "🦀 Seafood Specialties",
+        title: "📖 Recipe for Fish Tikka Setup",
+        steps: "Marinate boneless fish cubes in hung curd, ajwain (carom seeds), lemon juice, ginger-garlic paste, and tandoori spices for 20 minutes. Skewer and bake or grill at 220°C for 12 minutes.",
+        macros: { cal: "220 kcal", protein: "30g", fat: "8g", carbs: "4g", fiber: "1g", chol: "60mg" },
+        ingredients: ["fish", "curd", "yogurt", "ajwain", "lemon", "ginger", "garlic"]
+      },
+      "Fish Amritsari Setup": {
+        category: "seafood",
+        badge: "🦀 Seafood Specialties",
+        title: "📖 Recipe for Fish Amritsari Setup",
+        steps: "Marinate fish fillets with ginger-garlic paste, lemon juice, ajwain, red chili powder, and besan (gram flour) batter. Deep fry in hot mustard oil until crunchy and golden.",
+        macros: { cal: "270 kcal", protein: "28g", fat: "14g", carbs: "9g", fiber: "1.5g", chol: "65mg" },
+        ingredients: ["fish", "besan", "gram flour", "ajwain", "lemon", "mustard oil"]
+      },
+      "Crispy Fish Cutlet Setup": {
+        category: "seafood",
+        badge: "🦀 Seafood Specialties",
+        title: "📖 Recipe for Crispy Fish Cutlet Setup",
+        steps: "Flake boiled spiced fish and mix with mashed potatoes, chopped green chilies, coriander, and garam masala. Shape into cutlet patties, dip in egg wash, roll in breadcrumbs, and deep-fry.",
+        macros: { cal: "260 kcal", protein: "18g", fat: "12g", carbs: "22g", fiber: "2g", chol: "75mg" },
+        ingredients: ["fish", "potato", "breadcrumbs", "egg", "onion", "oil"]
+      },
+
+      // =========================================================================
+      // 🍹 30 REFRESHMENTS & BEVERAGES ITEMS
+      // =========================================================================
+      "Cold Coffee Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Cold Coffee Setup",
+        steps: "Blend 1.5 cups chilled milk, 1.5 tsp instant coffee powder dissolved in warm water, 2 tbsp sugar, and 4 ice cubes for 60 seconds until frothy. Drizzle chocolate syrup.",
+        macros: { cal: "180 kcal", protein: "6g", fat: "5g", carbs: "28g", fiber: "0g", chol: "15mg" },
+        ingredients: ["coffee powder", "coffee", "milk", "sugar", "ice"]
+      },
+      "Masala Chai Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Masala Chai Setup",
+        steps: "Boil 1 cup water with crushed ginger, cardamom, and cloves. Add 2 tsp tea leaves, 1 cup milk, and 2 tsp sugar. Simmer for 3-4 minutes and strain hot.",
+        macros: { cal: "115 kcal", protein: "4g", fat: "4g", carbs: "16g", fiber: "0.5g", chol: "12mg" },
+        ingredients: ["tea leaves", "tea", "milk", "sugar", "ginger", "cardamom"]
+      },
+      "Virgin Mojito Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Virgin Mojito Setup",
+        steps: "Muddle 8-10 fresh mint leaves, 4 lime wedges, and 1 tbsp sugar syrup. Fill with crushed ice, top with club soda or Sprite, and stir gently.",
+        macros: { cal: "95 kcal", protein: "0.2g", fat: "0g", carbs: "24g", fiber: "0.5g", chol: "0mg" },
+        ingredients: ["mint", "lemon", "lime", "sugar", "soda", "sprite", "ice"]
+      },
+      "Mango Lassi Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Mango Lassi Setup",
+        steps: "Blend 1 cup ripe mango pulp, 1 cup chilled yogurt, 1/2 cup milk, 2 tbsp sugar, and a pinch of cardamom powder until frothy. Serve with ice.",
+        macros: { cal: "240 kcal", protein: "7g", fat: "6g", carbs: "40g", fiber: "2g", chol: "18mg" },
+        ingredients: ["mango", "curd", "yogurt", "milk", "sugar", "cardamom"]
+      },
+      "Iced Lemon Tea Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Iced Lemon Tea Setup",
+        steps: "Brew black tea and let it cool completely. Fill a glass with ice cubes, pour the cooled tea, stir in 1.5 tbsp lemon juice, sugar syrup, and fresh mint leaves.",
+        macros: { cal: "70 kcal", protein: "0.2g", fat: "0g", carbs: "18g", fiber: "0.2g", chol: "0mg" },
+        ingredients: ["tea leaves", "tea", "lemon", "sugar", "ice", "mint"]
+      },
+      "Watermelon Cooler Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Watermelon Cooler Setup",
+        steps: "Blend seedless watermelon cubes with lemon juice, mint leaves, and black salt. Strain into a tall glass over crushed ice and top with a splash of soda.",
+        macros: { cal: "75 kcal", protein: "1.2g", fat: "0.3g", carbs: "18g", fiber: "1.5g", chol: "0mg" },
+        ingredients: ["watermelon", "lemon", "mint", "salt", "ice"]
+      },
+      "Rich Hot Chocolate Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Rich Hot Chocolate Setup",
+        steps: "Heat 1 cup milk in a saucepan. Whisk in 1 tbsp cocoa powder and sugar. Add 35g chopped dark chocolate and stir on low heat until creamy and melted.",
+        macros: { cal: "260 kcal", protein: "8g", fat: "14g", carbs: "28g", fiber: "3g", chol: "25mg" },
+        ingredients: ["chocolate", "cocoa powder", "milk", "sugar"]
+      },
+      "Fresh Shikanji Lemonade Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Fresh Shikanji Lemonade Setup",
+        steps: "Squeeze 1 lemon into chilled water or soda. Add sugar syrup, roasted cumin powder, black salt, and ice. Stir vigorously and serve with mint.",
+        macros: { cal: "80 kcal", protein: "0.4g", fat: "0g", carbs: "21g", fiber: "0.4g", chol: "0mg" },
+        ingredients: ["lemon", "water", "sugar", "salt", "cumin", "ice"]
+      },
+      "Banana Peanut Smoothie Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Banana Peanut Smoothie Setup",
+        steps: "Blend 2 ripe bananas, 1 cup chilled milk, 1 tbsp peanut butter, 1 tbsp honey, and 4 ice cubes for 1 minute until silky smooth.",
+        macros: { cal: "310 kcal", protein: "9g", fat: "9g", carbs: "52g", fiber: "5g", chol: "12mg" },
+        ingredients: ["banana", "milk", "peanut butter", "honey", "ice"]
+      },
+      "Fresh Fruit Chaat Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Fresh Fruit Chaat Setup",
+        steps: "Chop apples, bananas, grapes, and pomegranate. Toss in a bowl with 1 tsp lemon juice, 1/2 tsp chaat masala, and 1 tbsp honey. Chill before serving.",
+        macros: { cal: "130 kcal", protein: "1.5g", fat: "0.5g", carbs: "32g", fiber: "4.5g", chol: "0mg" },
+        ingredients: ["apple", "banana", "fruits", "grapes", "lemon", "honey"]
+      },
+      "Blue Lagoon Mocktail Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Blue Lagoon Mocktail Setup",
+        steps: "Fill a glass with ice. Add 2 tbsp Blue Curaçao syrup and 1 tbsp lemon juice. Top slowly with chilled Sprite or 7-Up and garnish with a lemon slice.",
+        macros: { cal: "110 kcal", protein: "0g", fat: "0g", carbs: "28g", fiber: "0g", chol: "0mg" },
+        ingredients: ["sprite", "lemon", "syrup", "ice"]
+      },
+      "Strawberry Milkshake Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Strawberry Milkshake Setup",
+        steps: "Blend 1 cup fresh sliced strawberries, 1.5 cups chilled whole milk, 1 scoop vanilla ice cream, and 2 tbsp sugar until thick and creamy.",
+        macros: { cal: "270 kcal", protein: "7g", fat: "11g", carbs: "36g", fiber: "2.5g", chol: "32mg" },
+        ingredients: ["strawberry", "milk", "ice cream", "sugar"]
+      },
+      "Sweet Punjabi Lassi Drink Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Sweet Punjabi Lassi Drink Setup",
+        steps: "Whisk thick chilled curd with powdered sugar, a dash of cardamom, and ice water using a traditional mathani until frothy. Top with clotted malai.",
+        macros: { cal: "250 kcal", protein: "8g", fat: "9g", carbs: "34g", fiber: "0g", chol: "25mg" },
+        ingredients: ["curd", "yogurt", "sugar", "cardamom", "water"]
+      },
+      "Oreo Shake Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Oreo Shake Setup",
+        steps: "Blend 5 Oreo cookies, 1.5 cups chilled milk, 1 scoop chocolate ice cream, and chocolate syrup. Pour into a glass and top with crushed Oreos.",
+        macros: { cal: "390 kcal", protein: "8g", fat: "18g", carbs: "52g", fiber: "2g", chol: "40mg" },
+        ingredients: ["oreo", "biscuit", "milk", "ice cream", "chocolate"]
+      },
+      "Detox Green Tea Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Detox Green Tea Setup",
+        steps: "Heat water to 80°C. Steep 1 green tea bag or 1 tsp leaves with a slice of lemon and fresh mint for 2-3 minutes; sweeten with raw honey.",
+        macros: { cal: "25 kcal", protein: "0.2g", fat: "0g", carbs: "6g", fiber: "0g", chol: "0mg" },
+        ingredients: ["green tea", "tea", "lemon", "honey", "water"]
+      },
+      "Masala Chaas Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Masala Chaas Setup",
+        steps: "Blend curd, cold water, mint leaves, green chili, ginger, roasted cumin powder, and black salt. Pour into a glass and serve chilled.",
+        macros: { cal: "65 kcal", protein: "3.5g", fat: "2.5g", carbs: "6g", fiber: "0.5g", chol: "8mg" },
+        ingredients: ["curd", "yogurt", "water", "mint", "ginger", "salt"]
+      },
+      "Chilled Rose Milk Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Chilled Rose Milk Setup",
+        steps: "Stir 2 tbsp Rooh Afza or rose syrup into 1 glass of ice-cold milk. Add soaked chia seeds (sabja) and serve with ice cubes.",
+        macros: { cal: "190 kcal", protein: "6g", fat: "5g", carbs: "30g", fiber: "1g", chol: "15mg" },
+        ingredients: ["milk", "rose syrup", "rooh afza", "chia seeds", "ice"]
+      },
+      "Fresh Pineapple Juice Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Fresh Pineapple Juice Setup",
+        steps: "Blend fresh pineapple chunks with black salt, lemon juice, and a splash of water. Strain through a sieve and serve over ice cubes.",
+        macros: { cal: "105 kcal", protein: "1g", fat: "0.2g", carbs: "26g", fiber: "2g", chol: "0mg" },
+        ingredients: ["pineapple", "lemon", "salt", "water", "ice"]
+      },
+      "Cucumber Mint Cooler Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Cucumber Mint Cooler Setup",
+        steps: "Blend 1 peeled cucumber with mint leaves, lemon juice, and black salt. Strain juice, pour over crushed ice, and top with chilled sparkling water.",
+        macros: { cal: "50 kcal", protein: "1.2g", fat: "0.2g", carbs: "11g", fiber: "1.5g", chol: "0mg" },
+        ingredients: ["cucumber", "mint", "lemon", "soda", "water"]
+      },
+      "South Indian Filter Coffee Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for South Indian Filter Coffee Setup",
+        steps: "Brew thick coffee decoction using a traditional brass filter. Froth with boiling hot full cream milk and sugar by pouring back and forth between dabarah and tumbler.",
+        macros: { cal: "140 kcal", protein: "5g", fat: "6g", carbs: "16g", fiber: "0g", chol: "18mg" },
+        ingredients: ["coffee powder", "coffee", "milk", "sugar"]
+      },
+      "Kacha Aam Panna Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Kacha Aam Panna Setup",
+        steps: "Pressure cook raw mangoes, peel, and extract pulp. Blend pulp with roasted cumin, mint leaves, black salt, and sugar. Dilute with chilled water and ice.",
+        macros: { cal: "120 kcal", protein: "0.8g", fat: "0.2g", carbs: "30g", fiber: "1.5g", chol: "0mg" },
+        ingredients: ["raw mango", "mango", "mint", "sugar", "cumin", "water"]
+      },
+      "Fresh Pomegranate Juice Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Fresh Pomegranate Juice Setup",
+        steps: "Pulse fresh pomegranate seeds in a blender on low speed for 10 seconds. Strain juice through a mesh strainer, season with black salt, and serve chilled.",
+        macros: { cal: "135 kcal", protein: "1.5g", fat: "0.5g", carbs: "32g", fiber: "1g", chol: "0mg" },
+        ingredients: ["pomegranate", "salt", "ice"]
+      },
+      "Thick Chocolate Shake Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Thick Chocolate Shake Setup",
+        steps: "Blend 1.5 cups milk, 2 scoops chocolate ice cream, and 2 tbsp chocolate syrup until thick. Garnish glass rim with cocoa powder.",
+        macros: { cal: "340 kcal", protein: "8g", fat: "14g", carbs: "46g", fiber: "2g", chol: "38mg" },
+        ingredients: ["chocolate", "milk", "ice cream", "sugar"]
+      },
+      "Orange Mint Punch Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Orange Mint Punch Setup",
+        steps: "Combine fresh orange juice, crushed mint leaves, a squeeze of lime, and simple syrup. Top with chilled ginger ale or club soda.",
+        macros: { cal: "115 kcal", protein: "1.5g", fat: "0.3g", carbs: "27g", fiber: "1.5g", chol: "0mg" },
+        ingredients: ["orange", "mint", "lemon", "soda", "sugar"]
+      },
+      "Kesari Badam Milk Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Kesari Badam Milk Setup",
+        steps: "Soak and peel 12 almonds; grind into a smooth paste. Simmer paste with 2 cups milk, saffron strands, and cardamom powder for 5 minutes. Serve warm or chilled.",
+        macros: { cal: "220 kcal", protein: "8g", fat: "11g", carbs: "22g", fiber: "2g", chol: "20mg" },
+        ingredients: ["almond", "badam", "milk", "saffron", "cardamom", "sugar"]
+      },
+      "Citrus Detox Infused Water Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Citrus Detox Infused Water Setup",
+        steps: "Add sliced cucumbers, lemons, and crushed mint leaves to a pitcher of water. Refrigerate for 2-3 hours to let flavours infuse before sipping.",
+        macros: { cal: "15 kcal", protein: "0.5g", fat: "0g", carbs: "3g", fiber: "0.5g", chol: "0mg" },
+        ingredients: ["cucumber", "lemon", "mint", "water"]
+      },
+      "Peach Iced Tea Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Peach Iced Tea Setup",
+        steps: "Simmer chopped peaches and sugar in water to make a syrup. Stir 3 tbsp peach syrup and lemon juice into cooled brewed black tea with plenty of ice.",
+        macros: { cal: "85 kcal", protein: "0.3g", fat: "0g", carbs: "22g", fiber: "1g", chol: "0mg" },
+        ingredients: ["tea leaves", "tea", "peach", "sugar", "lemon", "ice"]
+      },
+      "Kiwi Lemonade Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Kiwi Lemonade Setup",
+        steps: "Muddle peeled ripe kiwi slices with sugar syrup in a glass. Add lemon juice, crushed ice, and chilled soda; stir well.",
+        macros: { cal: "90 kcal", protein: "1g", fat: "0.4g", carbs: "22g", fiber: "2.5g", chol: "0mg" },
+        ingredients: ["kiwi", "lemon", "sugar", "soda", "ice"]
+      },
+      "Classic Americano Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Classic Americano Setup",
+        steps: "Extract a hot shot of espresso or mix 2 tsp premium instant coffee powder in 30ml hot water. Top up with 150ml piping hot water for a clean, rich coffee.",
+        macros: { cal: "5 kcal", protein: "0.3g", fat: "0g", carbs: "1g", fiber: "0g", chol: "0mg" },
+        ingredients: ["coffee powder", "coffee", "water"]
+      },
+      "Coconut Lime Cooler Setup": {
+        category: "refreshment",
+        badge: "🍹 Refreshments",
+        title: "📖 Recipe for Coconut Lime Cooler Setup",
+        steps: "Pour fresh tender coconut water into a glass. Stir in 1 tsp lime juice, fresh mint leaves, and tender coconut malai pieces. Serve chilled.",
+        macros: { cal: "55 kcal", protein: "1.5g", fat: "0.5g", carbs: "11g", fiber: "2.5g", chol: "0mg" },
+        ingredients: ["coconut water", "lemon", "mint"]
       }
-    }
-
-    function addIngredient() {
-      const input = document.getElementById("ingredientInput");
-      if (input.value.trim() !== "") {
-        document.getElementById("ingredientList").innerHTML += `<span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">${input.value}</span>`;
-        input.value = "";
-      }
-    }
-
-    function getRecipes() {
-      document.getElementById("results").innerHTML = "<p class='font-semibold text-emerald-700'>🍴 Matching recipes will appear here...</p>";
-    }
-
-    // Real recipes data
-    const recipes = {
-      tea: "Boil 1 cup water, add 2 tsp tea leaves, 1 inch crushed ginger, 2 crushed cardamoms. Add 1 cup milk, 2 tsp sugar. Simmer and strain.",
-      rasmalai: "Boil 1L milk, curdle with lemon juice. Shape discs, cook in sugar syrup. Soak in saffron-cardamom milk, garnish with nuts.",
-      lassi: "Blend 1 ripe mango, 1 cup yogurt, 1/2 cup milk, 2 tsp sugar, pinch cardamom, and ice cubes until smooth.",
-      pancakes: "Mix 1 cup flour, 1 tbsp sugar, 1 tsp baking powder, 1 egg, 1 cup milk. Cook on pan until golden. Serve with syrup.",
-      omelette: "Beat 2 eggs with onion, tomato, chili, coriander. Cook in pan with oil until set, fold and serve.",
-      "fruit salad": "Mix chopped seasonal fruits (mango, banana, papaya, berries). Add honey and lime juice dressing.",
-      "chocolate cake": "Mix 1 cup flour, 1/2 cup cocoa, 1 cup sugar, 1/2 cup butter, 2 eggs, 1 cup milk. Bake at 180°C for 30 mins.",
-      lays: "Spanish Tomato Tango flavor: potato chips seasoned with tangy tomato powder, chili, and spices."
     };
 
-    function showRecipe(item) {
-      document.getElementById("results").innerHTML = `<div class="p-4 bg-emerald-50 rounded-lg shadow"><h2 class="font-bold text-lg text-emerald-700">📖 Recipe for ${item}</h2><p class="mt-2 text-sm">${recipes[item]}</p></div>`;
+    // State Variables
+    let addedIngredients = [];
+    let activeItem = null;
+    let currentCategory = "all";
+    let selectedRating = 5;
+    let activeStarFilter = "all";
+    let editingReviewId = null;
+
+    let favorites = JSON.parse(localStorage.getItem("fridge_favs") || "[]");
+    let searchHistory = JSON.parse(localStorage.getItem("fridge_history") || "[]");
+    let allReviews = JSON.parse(localStorage.getItem("fridge_reviews") || "{}");
+    let myReviewIds = JSON.parse(localStorage.getItem("fridge_my_review_ids") || "[]");
+
+    // Elements
+    const container = document.getElementById("presetContainer");
+    const tagsContainer = document.getElementById("tagsContainer");
+    const historyChips = document.getElementById("historyChips");
+    const recipeCard = document.getElementById("recipeCard");
+    const recipeTitleText = document.getElementById("recipeTitleText");
+    const recipeBadge = document.getElementById("recipeBadge");
+    const recipeSteps = document.getElementById("recipeSteps");
+    const nutritionGrid = document.getElementById("nutritionGrid");
+    const customInput = document.getElementById("customInput");
+    const favCount = document.getElementById("favCount");
+    const myReviewsCount = document.getElementById("myReviewsCount");
+    const favToggleBtn = document.getElementById("favToggleBtn");
+    const reviewsList = document.getElementById("reviewsList");
+    const reviewCountText = document.getElementById("reviewCountText");
+    const starFilterBar = document.getElementById("starFilterBar");
+    const submitReviewBtn = document.getElementById("submitReviewBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const myReviewsDashboard = document.getElementById("myReviewsDashboard");
+    const myReviewsListContainer = document.getElementById("myReviewsListContainer");
+
+    const matchModal = document.getElementById("matchModal");
+    const modalList = document.getElementById("modalList");
+    const modalTitle = document.getElementById("modalTitle");
+
+    // 1. Render Preset Buttons
+    function renderButtons(filter = currentCategory) {
+      container.innerHTML = "";
+      Object.entries(recipesData).forEach(([item, data]) => {
+        const isFav = favorites.includes(item);
+        if (filter === "all" || (filter === "fav" && isFav) || data.category === filter) {
+          const btn = document.createElement("button");
+          btn.className = "preset-btn" + (activeItem === item ? " selected" : "");
+          btn.innerText = (isFav ? "❤️ " : "") + item;
+          btn.onclick = () => selectItem(item, data.category);
+          container.appendChild(btn);
+        }
+      });
+      if (filter === "fav" && favorites.length === 0) {
+        container.innerHTML = `<span style="font-size:12px; color:#888; font-style:italic;">No favorites saved yet. Click the ❤️ Favorite button on any recipe card to bookmark it here!</span>`;
+      }
+      favCount.innerText = favorites.length;
+      updateMyReviewsCount();
     }
+
+    // 2. Category Tab Switching (Auto-Sync)
+    function filterItems(category) {
+      currentCategory = category;
+      closeMyReviewsDashboard();
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      const activeBtn = document.getElementById(`tab-${category}`);
+      if (activeBtn) activeBtn.classList.add("active");
+      renderButtons(category);
+    }
+
+    // 3. Select Item
+    function selectItem(name, categoryOverride = null) {
+      activeItem = name;
+      const data = recipesData[name];
+      const targetCategory = categoryOverride || (data ? data.category : "all");
+
+      closeMyReviewsDashboard();
+
+      if (currentCategory !== "all" && currentCategory !== "fav" && currentCategory !== targetCategory) {
+        filterItems(targetCategory);
+      } else {
+        renderButtons(currentCategory);
+      }
+
+      addToHistory(name);
+      showRecipe(name);
+    }
+
+    // 4. Show Recipe & Macros
+    function showRecipe(name) {
+      const data = recipesData[name];
+      if (data) {
+        recipeTitleText.innerText = data.title;
+        recipeBadge.innerText = data.badge;
+        recipeBadge.className = `recipe-badge badge-${data.category}`;
+        recipeSteps.innerText = data.steps;
+
+        const m = data.macros;
+        nutritionGrid.innerHTML = `
+          <div class="nutri-box"><span class="nutri-label">Calories</span><span class="nutri-val">${m.cal}</span></div>
+          <div class="nutri-box"><span class="nutri-label">Protein</span><span class="nutri-val">${m.protein}</span></div>
+          <div class="nutri-box"><span class="nutri-label">Total Fat</span><span class="nutri-val">${m.fat}</span></div>
+          <div class="nutri-box"><span class="nutri-label">Total Carbs</span><span class="nutri-val">${m.carbs}</span></div>
+          <div class="nutri-box"><span class="nutri-label">Dietary Fiber</span><span class="nutri-val">${m.fiber}</span></div>
+          <div class="nutri-box"><span class="nutri-label">Cholesterol</span><span class="nutri-val">${m.chol}</span></div>
+        `;
+      } else {
+        recipeTitleText.innerText = `📖 Recipe for ${name}`;
+        recipeBadge.innerText = "Custom Recipe";
+        recipeBadge.className = "recipe-badge badge-veg";
+        recipeSteps.innerText = `Combine ${name} with your pantry staples (ghee, spices, herbs, oil) to prepare a fresh dish.`;
+        nutritionGrid.innerHTML = `
+          <div class="nutri-box"><span class="nutri-label">Calories</span><span class="nutri-val">~210 kcal</span></div>
+          <div class="nutri-box"><span class="nutri-label">Protein</span><span class="nutri-val">~14g</span></div>
+          <div class="nutri-box"><span class="nutri-label">Total Fat</span><span class="nutri-val">~6g</span></div>
+          <div class="nutri-box"><span class="nutri-label">Total Carbs</span><span class="nutri-val">~24g</span></div>
+          <div class="nutri-box"><span class="nutri-label">Dietary Fiber</span><span class="nutri-val">~4g</span></div>
+          <div class="nutri-box"><span class="nutri-label">Cholesterol</span><span class="nutri-val">0mg</span></div>
+        `;
+      }
+
+      updateFavBtn();
+      activeStarFilter = "all";
+      renderReviews();
+
+      recipeCard.style.display = "block";
+      recipeCard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 5. Dual Input Actions: Add Ingredient vs Search Dish
+    function addIngredientFromInput() {
+      const val = customInput.value.trim().toLowerCase();
+      if (!val) return;
+
+      if (!addedIngredients.includes(val)) {
+        addedIngredients.push(val);
+        renderTags();
+      }
+      customInput.value = "";
+    }
+
+    function searchDishDirectly() {
+      const val = customInput.value.trim().toLowerCase();
+      if (!val) return;
+
+      const matchedDishKey = Object.keys(recipesData).find(key => 
+        key.toLowerCase().includes(val) || recipesData[key].title.toLowerCase().includes(val)
+      );
+
+      if (matchedDishKey) {
+        selectItem(matchedDishKey);
+      } else {
+        alert(`No direct recipe found for "${val}". Added to your ingredients basket instead.`);
+        if (!addedIngredients.includes(val)) {
+          addedIngredients.push(val);
+          renderTags();
+        }
+      }
+      customInput.value = "";
+    }
+
+    // 6. Render Tags Basket
+    function renderTags() {
+      if (addedIngredients.length === 0) {
+        tagsContainer.innerHTML = `<span class="empty-tags">No ingredients added yet. Type above and press + Add Ingredient!</span>`;
+        return;
+      }
+
+      tagsContainer.innerHTML = "";
+      addedIngredients.forEach((item, index) => {
+        const chip = document.createElement("div");
+        chip.className = "tag-chip";
+        chip.innerHTML = `
+          <span>${item}</span>
+          <span class="close-btn" onclick="removeIngredient(${index})" title="Remove">×</span>
+        `;
+        tagsContainer.appendChild(chip);
+      });
+    }
+
+    function removeIngredient(index) {
+      addedIngredients.splice(index, 1);
+      renderTags();
+    }
+
+    // 7. Find Matching Recipes Modal
+    function findRecipesFromIngredients() {
+      if (addedIngredients.length === 0) {
+        alert("Please add at least 1 ingredient (e.g., 'rice', 'milk', 'fish', 'atta') to the basket first!");
+        return;
+      }
+
+      const matches = [];
+      Object.entries(recipesData).forEach(([dishName, dishData]) => {
+        let matchScore = 0;
+        const dishIngs = (dishData.ingredients || []).map(i => i.toLowerCase());
+
+        addedIngredients.forEach(userIng => {
+          dishIngs.forEach(di => {
+            if (di === userIng || di.includes(userIng) || userIng.includes(di)) {
+              matchScore++;
+            }
+          });
+        });
+
+        if (matchScore > 0) {
+          matches.push({ name: dishName, score: matchScore, data: dishData });
+        }
+      });
+
+      matches.sort((a, b) => b.score - a.score);
+
+      modalList.innerHTML = "";
+      if (matches.length > 0) {
+        modalTitle.innerText = `🍲 Matching Recipes Found (${matches.length})`;
+        matches.slice(0, 10).forEach(m => {
+          const btn = document.createElement("button");
+          btn.className = "modal-item-btn";
+          btn.innerHTML = `👉 <strong>${m.name.replace(" Setup", "")}</strong> <span style="font-size:11px; color:#555;">(${m.data.badge})</span>`;
+          btn.onclick = () => {
+            closeModal();
+            selectItem(m.name, m.data.category);
+          };
+          modalList.appendChild(btn);
+        });
+
+        selectItem(matches[0].name, matches[0].data.category);
+      } else {
+        modalTitle.innerText = "🔍 No Direct Match Found";
+        modalList.innerHTML = `
+          <p style="font-size: 13px; color: #555; padding: 10px 0;">
+            No preset recipe matched: <strong>${addedIngredients.join(", ")}</strong>.
+            Try common staples like <em>rice, milk, sugar, ghee, paneer, fish, atta, or chicken</em>.
+          </p>
+        `;
+      }
+
+      matchModal.style.display = "flex";
+    }
+
+    function closeModal() {
+      matchModal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target === matchModal) closeModal();
+    };
+
+    // 8. History System
+    function addToHistory(item) {
+      if (!item) return;
+      const clean = item.replace(" Setup", "");
+      searchHistory = searchHistory.filter(h => h.toLowerCase() !== clean.toLowerCase());
+      searchHistory.unshift(clean);
+      if (searchHistory.length > 8) searchHistory.pop();
+      localStorage.setItem("fridge_history", JSON.stringify(searchHistory));
+      renderHistory();
+    }
+
+    function renderHistory() {
+      if (searchHistory.length === 0) {
+        historyChips.innerHTML = `<span style="font-size:11px; color:#999; font-style:italic;">No search history yet.</span>`;
+        return;
+      }
+      historyChips.innerHTML = "";
+      searchHistory.forEach(item => {
+        const chip = document.createElement("div");
+        chip.className = "history-chip";
+        chip.innerText = "🔍 " + item;
+        chip.onclick = () => {
+          const matchedDish = Object.keys(recipesData).find(k => k.toLowerCase().includes(item.toLowerCase()));
+          if (matchedDish) {
+            selectItem(matchedDish);
+          } else {
+            customInput.value = item;
+            searchDishDirectly();
+          }
+        };
+        historyChips.appendChild(chip);
+      });
+    }
+
+    function clearHistory() {
+      searchHistory = [];
+      localStorage.removeItem("fridge_history");
+      renderHistory();
+    }
+
+    // 9. Favorites System
+    function toggleFavoriteCurrent() {
+      if (!activeItem) return;
+      if (favorites.includes(activeItem)) {
+        favorites = favorites.filter(f => f !== activeItem);
+      } else {
+        favorites.push(activeItem);
+      }
+      localStorage.setItem("fridge_favs", JSON.stringify(favorites));
+      updateFavBtn();
+      favCount.innerText = favorites.length;
+      renderButtons();
+    }
+
+    function updateFavBtn() {
+      if (favorites.includes(activeItem)) {
+        favToggleBtn.innerText = "💖 Favorited";
+        favToggleBtn.classList.add("active");
+      } else {
+        favToggleBtn.innerText = "❤️ Favorite";
+        favToggleBtn.classList.remove("active");
+      }
+    }
+
+    // 10. Reviews System: Star Sorting, Filters, Edit, Delete & My Reviews Hub
+    function setRating(num) {
+      selectedRating = num;
+      const stars = document.querySelectorAll("#starRating span");
+      stars.forEach((s, idx) => {
+        if (idx < num) s.classList.add("active");
+        else s.classList.remove("active");
+      });
+    }
+
+    function updateMyReviewsCount() {
+      myReviewsCount.innerText = myReviewIds.length;
+    }
+
+    function submitReview() {
+      if (!activeItem) return;
+      const name = document.getElementById("reviewerName").value.trim() || "Food Explorer";
+      const text = document.getElementById("reviewText").value.trim();
+
+      if (!text) {
+        alert("Please write a review comment before submitting!");
+        return;
+      }
+
+      if (!allReviews[activeItem]) {
+        allReviews[activeItem] = [];
+      }
+
+      if (editingReviewId) {
+        const review = allReviews[activeItem].find(r => r.id === editingReviewId);
+        if (review) {
+          review.name = name;
+          review.text = text;
+          review.stars = selectedRating;
+        }
+        editingReviewId = null;
+        submitReviewBtn.innerText = "Submit Review ⭐";
+        cancelEditBtn.style.display = "none";
+      } else {
+        const newId = Date.now();
+        const reviewObj = {
+          id: newId,
+          name: name,
+          stars: selectedRating,
+          text: text,
+          likes: 0,
+          replies: []
+        };
+        allReviews[activeItem].unshift(reviewObj);
+        myReviewIds.push(newId);
+        localStorage.setItem("fridge_my_review_ids", JSON.stringify(myReviewIds));
+      }
+
+      localStorage.setItem("fridge_reviews", JSON.stringify(allReviews));
+
+      document.getElementById("reviewerName").value = "";
+      document.getElementById("reviewText").value = "";
+      setRating(5);
+      renderReviews();
+      updateMyReviewsCount();
+    }
+
+    function editReview(id, dishName = null) {
+      const targetDish = dishName || activeItem;
+      if (!targetDish || !allReviews[targetDish]) return;
+      
+      if (activeItem !== targetDish) {
+        selectItem(targetDish);
+      }
+
+      const review = allReviews[targetDish].find(r => r.id === id);
+      if (!review) return;
+
+      document.getElementById("reviewerName").value = review.name;
+      document.getElementById("reviewText").value = review.text;
+      setRating(review.stars);
+
+      editingReviewId = id;
+      submitReviewBtn.innerText = "Update Review ✏️";
+      cancelEditBtn.style.display = "inline-block";
+
+      document.getElementById("reviewText").focus();
+      document.getElementById("reviewText").scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function cancelEditing() {
+      editingReviewId = null;
+      document.getElementById("reviewerName").value = "";
+      document.getElementById("reviewText").value = "";
+      setRating(5);
+      submitReviewBtn.innerText = "Submit Review ⭐";
+      cancelEditBtn.style.display = "none";
+    }
+
+    function deleteReview(id, dishName = null) {
+      if (!confirm("Are you sure you want to delete this review?")) return;
+      const targetDish = dishName || activeItem;
+      if (!targetDish || !allReviews[targetDish]) return;
+
+      allReviews[targetDish] = allReviews[targetDish].filter(r => r.id !== id);
+      myReviewIds = myReviewIds.filter(myId => myId !== id);
+
+      localStorage.setItem("fridge_reviews", JSON.stringify(allReviews));
+      localStorage.setItem("fridge_my_review_ids", JSON.stringify(myReviewIds));
+
+      renderReviews();
+      updateMyReviewsCount();
+      if (myReviewsDashboard.style.display === "block") {
+        renderMyReviewsDashboardList();
+      }
+    }
+
+    function setStarFilter(filterVal) {
+      activeStarFilter = filterVal;
+      renderReviews();
+    }
+
+    function renderReviews() {
+      if (!activeItem) return;
+      let reviews = allReviews[activeItem] || [];
+
+      reviews.sort((a, b) => b.stars - a.stars);
+
+      reviewCountText.innerText = `${reviews.length} Reviews`;
+
+      const counts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+      reviews.forEach(r => { if (counts[r.stars] !== undefined) counts[r.stars]++; });
+
+      starFilterBar.innerHTML = `
+        <button class="star-filter-pill ${activeStarFilter === 'all' ? 'active' : ''}" onclick="setStarFilter('all')">All (${reviews.length})</button>
+        <button class="star-filter-pill ${activeStarFilter === 5 ? 'active' : ''}" onclick="setStarFilter(5)">5★ (${counts[5]})</button>
+        <button class="star-filter-pill ${activeStarFilter === 4 ? 'active' : ''}" onclick="setStarFilter(4)">4★ (${counts[4]})</button>
+        <button class="star-filter-pill ${activeStarFilter === 3 ? 'active' : ''}" onclick="setStarFilter(3)">3★ (${counts[3]})</button>
+        <button class="star-filter-pill ${activeStarFilter === 2 ? 'active' : ''}" onclick="setStarFilter(2)">2★ (${counts[2]})</button>
+        <button class="star-filter-pill ${activeStarFilter === 1 ? 'active' : ''}" onclick="setStarFilter(1)">1★ (${counts[1]})</button>
+      `;
+
+      const filteredReviews = activeStarFilter === "all" 
+        ? reviews 
+        : reviews.filter(r => r.stars === Number(activeStarFilter));
+
+      if (filteredReviews.length === 0) {
+        reviewsList.innerHTML = `<p style="font-size:12px; color:#888; font-style:italic; padding:6px 0;">No reviews matching this star filter.</p>`;
+        return;
+      }
+
+      reviewsList.innerHTML = "";
+      filteredReviews.forEach(r => {
+        const isMine = myReviewIds.includes(r.id);
+        const item = document.createElement("div");
+        item.className = "review-item";
+        item.innerHTML = `
+          <div class="review-item-header">
+            <div class="review-user-wrap">
+              <span class="review-user">👤 ${r.name}</span>
+              ${isMine ? `<span class="my-review-tag">My Review</span>` : ''}
+            </div>
+            <span class="review-stars">${"★".repeat(r.stars)}${"☆".repeat(5 - r.stars)}</span>
+          </div>
+          <div class="review-text">${r.text}</div>
+          <div class="review-actions">
+            <button class="btn-link" onclick="likeReview(${r.id})">👍 Like (${r.likes})</button>
+            <button class="btn-link" onclick="toggleReplyBox(${r.id})">💬 Reply (${r.replies.length})</button>
+            ${isMine ? `
+              <button class="btn-link" onclick="editReview(${r.id})">✏️ Edit</button>
+              <button class="btn-link delete-link" onclick="deleteReview(${r.id})">🗑️ Delete</button>
+            ` : ''}
+          </div>
+          <div class="reply-box" id="replyBox_${r.id}">
+            <div style="display:flex; gap:6px; margin-bottom:6px;">
+              <input type="text" id="replyInput_${r.id}" placeholder="Write a reply..." style="flex:1; padding:4px 8px; font-size:11.5px; border:1px solid #ccc; border-radius:6px;" />
+              <button onclick="addReply(${r.id})" style="background:#1e7e4e; color:#fff; border:none; padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer;">Reply</button>
+            </div>
+            <div class="reply-list" id="replyList_${r.id}">
+              ${r.replies.map(rep => `<div class="reply-item">💬 <strong>${rep.name}:</strong> ${rep.text}</div>`).join("")}
+            </div>
+          </div>
+        `;
+        reviewsList.appendChild(item);
+      });
+    }
+
+    function likeReview(id) {
+      if (!activeItem || !allReviews[activeItem]) return;
+      const review = allReviews[activeItem].find(r => r.id === id);
+      if (review) {
+        review.likes += 1;
+        localStorage.setItem("fridge_reviews", JSON.stringify(allReviews));
+        renderReviews();
+      }
+    }
+
+    function toggleReplyBox(id) {
+      const box = document.getElementById(`replyBox_${id}`);
+      if (box) {
+        box.style.display = (box.style.display === "block") ? "none" : "block";
+      }
+    }
+
+    function addReply(id) {
+      const input = document.getElementById(`replyInput_${id}`);
+      const val = input.value.trim();
+      if (!val) return;
+
+      const review = allReviews[activeItem].find(r => r.id === id);
+      if (review) {
+        review.replies.push({
+          name: "Fellow Chef",
+          text: val
+        });
+        localStorage.setItem("fridge_reviews", JSON.stringify(allReviews));
+        renderReviews();
+      }
+    }
+
+    // 11. "My Reviews" Dedicated Hub Logic
+    function showMyReviewsDashboard() {
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById("tab-myreviews").classList.add("active");
+      myReviewsDashboard.style.display = "block";
+      recipeCard.style.display = "none";
+      renderMyReviewsDashboardList();
+      myReviewsDashboard.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeMyReviewsDashboard() {
+      myReviewsDashboard.style.display = "none";
+    }
+
+    function renderMyReviewsDashboardList() {
+      myReviewsListContainer.innerHTML = "";
+      let foundAny = false;
+
+      Object.entries(allReviews).forEach(([dishKey, reviews]) => {
+        reviews.forEach(r => {
+          if (myReviewIds.includes(r.id)) {
+            foundAny = true;
+            const card = document.createElement("div");
+            card.className = "my-review-card";
+            card.innerHTML = `
+              <div class="my-review-dish-header">
+                <span class="my-review-dish-name">🍲 ${dishKey}</span>
+                <span class="review-stars">${"★".repeat(r.stars)}${"☆".repeat(5 - r.stars)}</span>
+              </div>
+              <div class="review-text">"${r.text}"</div>
+              <div class="review-actions" style="margin-top:8px;">
+                <button class="btn-link" onclick="selectItem('${dishKey}')" style="color:#0284c7;">👉 View Dish</button>
+                <button class="btn-link" onclick="editReview(${r.id}, '${dishKey}')">✏️ Edit</button>
+                <button class="btn-link delete-link" onclick="deleteReview(${r.id}, '${dishKey}')">🗑️ Delete</button>
+                <span style="color:#888; font-size:11px; margin-left:auto;">👍 ${r.likes} Likes • 💬 ${r.replies.length} Replies</span>
+              </div>
+            `;
+            myReviewsListContainer.appendChild(card);
+          }
+        });
+      });
+
+      if (!foundAny) {
+        myReviewsListContainer.innerHTML = `
+          <p style="font-size:12.5px; color:#666; font-style:italic; padding:12px 0;">
+            You haven't written any reviews yet. Try any recipe and submit your star rating & feedback below to see it listed here!
+          </p>
+        `;
+      }
+    }
+
+    // Bootstrap App
+    renderButtons("all");
+    renderTags();
+    renderHistory();
+    setRating(5);
   </script>
 </body>
 </html>
